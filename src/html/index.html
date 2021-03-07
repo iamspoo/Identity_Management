@@ -26,7 +26,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 
                   
-                    <form class="px-4 py-3" action='/workapp/docsign_in/' method=POST>{% csrf_token %}
+                    <form class="px-4 py-3" action="App.loginuser()" method=POST>{% csrf_token %}
                       <div class="form-group">
                         <label>Username</label>
                         <input type="text" class="form-control" name = 'username' placeholder = 'Username'>
@@ -39,7 +39,7 @@
                       <button type="submit" class="btn btn-primary">Sign in</button>
                     </form>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item text-primary" href="#">New around here? Sign up</a>
+                    <a class="dropdown-item text-primary" href="App.adduser()">New around here? Sign up</a>
                     <a class="dropdown-item text-primary" href="#">Forgot password?</a>
                   </div>
                 
@@ -52,7 +52,7 @@
                       User2
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <form class="px-4 py-3" action='/workapp/ngosign_in/' method=POST>{% csrf_token %}
+                  <form class="px-4 py-3" action="App.loginuser2()" method=POST>{% csrf_token %}
                     <div class="form-group">
                       <label>Username</label>
                       <input type="text" class="form-control" name = 'nusername' placeholder = 'Username'>
@@ -65,13 +65,16 @@
                     <button type="submit" class="btn btn-primary">Sign in</button>
                   </form>
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item text-primary" href="#">New around here? Sign up</a>
+                  <a class="dropdown-item text-primary" href="App.adduser2()">New around here? Sign up</a>
                   <a class="dropdown-item text-primary" href="#">Forgot password?</a>
                 </div>
                 </li>
               </ul>
             </div>
         </nav>
+		
+		<div id="msg"><p> No message </p></div>
+		
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
