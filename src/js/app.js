@@ -10,29 +10,29 @@ window.App = {
   start: function() { 
     IdentityContract.setProvider(window.web3.currentProvider)
     IdentityContract.defaults({from: window.web3.eth.accounts[0],gas:6721975})
-  }
-}
+  },
 
 loginuser: function() {
 	$("#msg").html("<p>UserLogin</p>")
       return
-}
+},
 
 adduser :function(){
 	$("#msg").html("<p>UserSignup</p>")
       return
-}
+},
 
 loginuser2: function() {
 	$("#msg").html("<p>User2Login</p>")
       return
-}
+},
 
 adduser2 :function(){
 	$("#msg").html("<p>User2Signup</p>")
       return
 }
 	
+}
 
 window.addEventListener("load", function() {
   if (window.ethereum) {
