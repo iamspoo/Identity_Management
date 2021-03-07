@@ -3,7 +3,7 @@ import "../css/style.css"
 import { default as Web3} from "web3"
 import { default as contract } from "truffle-contract"
 
-import identityartifact from "../../build/contracts/Identitys.json"
+import identityartifact from "../../build/contracts/Identity.json"
 var IdentityContract = contract(identityartifact)
 
 window.App = {
