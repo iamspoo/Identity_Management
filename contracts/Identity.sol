@@ -21,7 +21,7 @@ contract Identity {
 
     function addUser(bytes32 username, bytes32 password) onlyOwner public {
         if (users[username].doesExist == false){
-            candidates[username] = User(password,true);
+            users[username] = User(password,true);
             //emit AddedCandidate(candidateID);
         }
         else{
