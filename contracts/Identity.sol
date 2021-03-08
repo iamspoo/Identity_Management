@@ -32,9 +32,10 @@ contract Identity {
    
     function validate(bytes32 username, bytes32 password) view public returns (bool) {
         if(users[username].password==password){
-            return true;
+            //return true;
         }
-        return false;
+        //return false;
+		revert("User does not exist");
     }
 
 }

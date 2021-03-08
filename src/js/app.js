@@ -21,11 +21,27 @@ loginuser: function() {
 	}
 	console.log(uname); 
 	console.log(pword); 
+	IdentityContract.deployed().then(function(instance){
+		instance.validate(uname,pword).then(function(result){	
+		}).catch(function(err){ 
+        console.log("ERROR! " + err.message)
+        alert("User does not exists");
+		return 
+      })
+	}).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+	  return
+    })
 	$("#msg").html("<p>recieved</p>")
       return
 },
 
 adduser :function(){
+	$("#msg").html("<p>UserSignup</p>")
+      return
+},
+
+loginuser2: function() {
 	var uname = $("#uname").val() 
 	var pword = $("#pword").val() 
 	if (uname === "" || pword === ""){
@@ -34,12 +50,18 @@ adduser :function(){
 	}
 	console.log(uname); 
 	console.log(pword);
-	$("#msg").html("<p>UserSignup</p>")
-      return
-},
-
-loginuser2: function() {
-	$("#msg").html("<p>User2Login</p>")
+	IdentityContract.deployed().then(function(instance){
+		instance.validate(uname,pword).then(function(result){	
+		}).catch(function(err){ 
+        console.log("ERROR! " + err.message)
+        alert("User does not exists");
+		return
+      })
+	}).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+	  return
+    })
+	$("#msg").html("<p>recieved</p>")
       return
 },
 
