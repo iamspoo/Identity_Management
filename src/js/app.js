@@ -13,11 +13,27 @@ window.App = {
   },
 
 loginuser: function() {
-	$("#msg").html("<p>UserLogin</p>")
+	var uname = $("#uname").val() 
+	var pword = $("#pword").val() 
+	if (uname === "" || pword === ""){
+		alert("Username or password is empty");
+		return 
+	}
+	console.log(uname); 
+	console.log(pword); 
+	$("#msg").html("<p>recieved</p>")
       return
 },
 
 adduser :function(){
+	var uname = $("#uname").val() 
+	var pword = $("#pword").val() 
+	if (uname === "" || pword === ""){
+		alert("Username or password is empty");
+		return 
+	}
+	console.log(uname); 
+	console.log(pword);
 	$("#msg").html("<p>UserSignup</p>")
       return
 },
@@ -49,7 +65,7 @@ window.addEventListener("load", function() {
 
   }
   else {
-    const provider = new Web3.providers.HttpProvider('http://127.0.0.1:6545');
+    const provider = new Web3.providers.HttpProvider('http://127.0.0.1:7545');
     const web3 = new Web3(provider);
     console.log('No web3 instance injected, using Local web3.');
     window.web3= web3;

@@ -25,19 +25,18 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 
-                  
-                    <form class="px-4 py-3" onclick="App.loginuser()" method=POST>{% csrf_token %}
+					<div class="px-4 py-3">
                       <div class="form-group">
                         <label>Username</label>
-                        <input type="text" class="form-control" name = 'username' placeholder = 'Username'>
+                        <input type="text" class="form-control" id="uname" name = 'username' placeholder = 'Username'>
                       </div>
                       <div class="form-group">
                         <label>Password</label>
-                        <input type="password" class="form-control" name = "password" placeholder="Password">
+                        <input type="password" class="form-control" id="pword" name = "password" placeholder="Password">
                       </div>
                       
-                      <button type="submit" class="btn btn-primary">Sign in</button>
-                    </form>
+                      <button type="submit" class="btn btn-primary" onclick="App.loginuser()" >Sign in</button>
+                    </div>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item text-primary" onclick="App.adduser()">New around here? Sign up</a>
                     <a class="dropdown-item text-primary" href="#">Forgot password?</a>
@@ -52,18 +51,18 @@
                       User2
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <form class="px-4 py-3" onclick="App.loginuser2()" method=POST>{% csrf_token %}
+				 <div class="px-4 py-3" >
                     <div class="form-group">
                       <label>Username</label>
-                      <input type="text" class="form-control" name = 'nusername' placeholder = 'Username'>
+                      <input type="text" class="form-control" id="uname" name = 'nusername' placeholder = 'Username'>
                     </div>
                     <div class="form-group">
                       <label>Password</label>
-                      <input type="password" class="form-control" name = "npassword" placeholder="Password">
+                      <input type="password" class="form-control" id="pword" name = "npassword" placeholder="Password">
                     </div>
                     
-                    <button type="submit" class="btn btn-primary">Sign in</button>
-                  </form>
+                    <button type="submit" class="btn btn-primary"  onclick="App.loginuser2()">Sign in</button>
+				 </div>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item text-primary" onclick="App.adduser2()">New around here? Sign up</a>
                   <a class="dropdown-item text-primary" href="#">Forgot password?</a>
@@ -73,7 +72,7 @@
             </div>
         </nav>
 		
-		<div id="msg"><p> No message </p></div>
+		<div id="msg"><p> no message </p></div>
 		
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
