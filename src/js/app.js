@@ -50,8 +50,8 @@ adduser :function(){
 },
 
 loginuser2: function() {
-	var uname = $("#uname").val() 
-	var pword = $("#pword").val() 
+	var uname = $("#uname2").val() 
+	var pword = $("#pword2").val() 
 	if (uname === "" || pword === ""){
 		alert("Username or password is empty");
 		return 
