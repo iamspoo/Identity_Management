@@ -37,6 +37,14 @@ loginuser: function() {
 },
 
 adduser :function(){
+	var uname = $("#uname").val() 
+	var pword = $("#pword").val() 
+	if (uname === "" || pword === ""){
+		alert("Username or password is empty");
+		return 
+	}
+	console.log(uname); 
+	console.log(pword);
 	$("#msg").html("<p>UserSignup</p>")
       return
 },
@@ -66,6 +74,14 @@ loginuser2: function() {
 },
 
 adduser2 :function(){
+	var uname = $("#uname2").val() 
+	var pword = $("#pword2").val() 
+	if (uname === "" || pword === ""){
+		alert("Username or password is empty");
+		return 
+	}
+	console.log(uname); 
+	console.log(pword);
 	$("#msg").html("<p>User2Signup</p>")
       return
 }
