@@ -22,7 +22,7 @@ loginuser: function() {
 	console.log(uname); 
 	console.log(pword); 
 	IdentityContract.deployed().then(function(instance){
-		instance.validate(uname,pword).then(function(result){	
+		instance.validateUser(uname,pword).then(function(result){	
 		}).catch(function(err){ 
         console.log("ERROR! " + err.message)
         alert("User does not exists");
@@ -32,7 +32,6 @@ loginuser: function() {
       console.log("ERROR! " + err.message)
 	  return
     })
-	$("#msg").html("<p>recieved</p>")
       return
 },
 
@@ -47,16 +46,10 @@ adduser :function(){
 	console.log(pword);
 	IdentityContract.deployed().then(function(instance){
     instance.addUser(uname,pword).then(function(result){
-      /*if(result==true){
-        $("#msg").html("<p>Voted</p>")
-      }
-      else{
-        $("#msg").html("<p>Already Voted</p>")
-      }*/
-      $("#msg").html("<p>Voted</p>")
+		alert("Thank you! for signing up")
     }).catch(function(err){ 
       console.log("ERROR! " + err.message)
-      $("#msg").html("<p>Username already exists</p>")
+      alert("Username already exists")
     })
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
@@ -74,7 +67,7 @@ loginuser2: function() {
 	console.log(uname); 
 	console.log(pword);
 	IdentityContract.deployed().then(function(instance){
-		instance.validate(uname,pword).then(function(result){	
+		instance.validateOrg(uname,pword).then(function(result){	
 		}).catch(function(err){ 
         console.log("ERROR! " + err.message)
         alert("User does not exists");
@@ -97,7 +90,16 @@ adduser2 :function(){
 	}
 	console.log(uname); 
 	console.log(pword);
-	$("#msg").html("<p>User2Signup</p>")
+	IdentityContract.deployed().then(function(instance){
+    instance.addOrg(uname,pword).then(function(result){
+		alert("Thank you! for signing up")
+    }).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+      alert("Username already exists")
+    })
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  })
       return
 }
 	
@@ -107,7 +109,7 @@ window.addEventListener("load", function() {
   if (window.ethereum) {
     const web3 = new Web3(window.ethereum);
     try {
-      window.ethereum.enable();
+      window.eth_requestAccounts;
       window.web3= web3;
     } catch (error) {
       console.error(error);
