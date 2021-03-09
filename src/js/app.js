@@ -45,9 +45,24 @@ adduser :function(){
 	}
 	console.log(uname); 
 	console.log(pword);
-	$("#msg").html("<p>UserSignup</p>")
-      return
+	IdentityContract.deployed().then(function(instance){
+    instance.addUser(uname,pword).then(function(result){
+      /*if(result==true){
+        $("#msg").html("<p>Voted</p>")
+      }
+      else{
+        $("#msg").html("<p>Already Voted</p>")
+      }*/
+      $("#msg").html("<p>Voted</p>")
+    }).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+      $("#msg").html("<p>Username already exists</p>")
+    })
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  })
 },
+
 
 loginuser2: function() {
 	var uname = $("#uname2").val() 
