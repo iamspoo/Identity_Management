@@ -1,7 +1,6 @@
 pragma solidity 0.5.16;
 
 contract Identity {
-    //event AddedCandidate(uint candidateID);
 
     address owner;
     constructor() public {
@@ -26,19 +25,16 @@ contract Identity {
     mapping (bytes32 => Organisation) org;
 
     function addUser(bytes32 username, bytes32 pswd) onlyOwner public {
-        /*if (users[username].doesExist == false){
-            users[username] = User(password,true);
-            //emit AddedCandidate(candidateID);
+        if (users[username].doesExist == false){
+            users[username] = User(pswd,true);
         }
         else{
             revert("Username already exists");
-        }*/
-        users[username] = User(pswd,true);
+        }
     }
     function addOrg(bytes32 username, bytes32 pswd) onlyOwner public {
         if (org[username].doesExist == false){
             org[username] = Organisation(pswd,true);
-            //emit AddedCandidate(candidateID);
         }
         else{
             revert("Username already exists");

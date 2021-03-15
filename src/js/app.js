@@ -42,8 +42,6 @@ adduser :function(){
 		alert("Username or password is empty");
 		return 
 	}
-	console.log(uname); 
-	console.log(pword);
 	IdentityContract.deployed().then(function(instance){
     instance.addUser(uname,pword).then(function(result){
 		alert("Thank you! for signing up")
@@ -88,8 +86,6 @@ adduser2 :function(){
 		alert("Username or password is empty");
 		return 
 	}
-	console.log(uname); 
-	console.log(pword);
 	IdentityContract.deployed().then(function(instance){
     instance.addOrg(uname,pword).then(function(result){
 		alert("Thank you! for signing up")
@@ -100,16 +96,14 @@ adduser2 :function(){
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   })
-      return
-}
-	
+}	
 }
 
 window.addEventListener("load", function() {
   if (window.ethereum) {
     const web3 = new Web3(window.ethereum);
     try {
-      window.eth_requestAccounts;
+      window.ethereum.enable();
       window.web3= web3;
     } catch (error) {
       console.error(error);
