@@ -32,6 +32,7 @@ loginuser: function() {
       console.log("ERROR! " + err.message)
 	  return
     })
+	window.location.replace("http://localhost:8080/main.html");
       return
 },
 
