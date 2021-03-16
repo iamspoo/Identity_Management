@@ -18,23 +18,26 @@ loginuser: function() {
 	var pword = $("#pword").val() 
 	if (uname === "" || pword === ""){
 		alert("Username or password is empty");
-		return 
-	}
-	console.log(uname); 
-	console.log(pword); 
+		return; 
+	}  
 	IdentityContract.deployed().then(function(instance){
-		instance.validateUser(uname,pword).then(function(result){	
-		}).catch(function(err){ 
-        console.log("ERROR! " + err.message)
-        alert("User does not exists");
-		return 
-      })
+		instance.validateUser(uname,pword).then(function(data){	
+      console.log(data);
+      if(data==true){
+        window.location.replace("http://localhost:8080/main.html");
+        return;
+      }
+      else{
+        alert("Invalid username or password");
+		    return; 
+      }
 	}).catch(function(err){ 
       console.log("ERROR! " + err.message)
-	  return
-    })
-	window.location.replace("http://localhost:8080/main.html");
-      return
+	  return;
+    })	
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  })  
 },
 
 adduser :function(){
@@ -64,21 +67,24 @@ loginuser2: function() {
 		alert("Username or password is empty");
 		return 
 	}
-	console.log(uname); 
-	console.log(pword);
 	IdentityContract.deployed().then(function(instance){
-		instance.validateOrg(uname,pword).then(function(result){	
-		}).catch(function(err){ 
-        console.log("ERROR! " + err.message)
-        alert("User does not exists");
-		return
-      })
+		instance.validateOrg(uname,pword).then(function(data){	
+      console.log(data);
+      if(data==true){
+        window.location.replace("http://localhost:8080/main.html");
+        return;
+      }
+      else{
+        alert("Invalid username or password");
+		    return; 
+      }
 	}).catch(function(err){ 
       console.log("ERROR! " + err.message)
-	  return
-    })
-	$("#msg").html("<p>recieved</p>")
-      return
+	  return;
+    })	
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  })  
 },
 
 adduser2 :function(){
