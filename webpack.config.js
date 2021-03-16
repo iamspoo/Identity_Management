@@ -12,7 +12,8 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: './src/index.html', to: "index.html" },
       { from: './src/signup.html', to: "signup.html" },
-	  { from: './src/main.html', to: "main.html" }
+	    { from: './src/main.html', to: "main.html" },
+	    { from: './src/css/style3.css', to: "style3.css" }
     ])
   ],
   module: {
