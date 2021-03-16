@@ -5,6 +5,7 @@ import { default as contract } from "truffle-contract"
 
 import identityartifact from "../../build/contracts/Identity.json"
 var IdentityContract = contract(identityartifact)
+var bufferfile = null;
 
 window.App = {
   start: function() { 
@@ -97,7 +98,30 @@ adduser2 :function(){
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   })
-}	
+},
+	
+captureFile: function(){
+	try{
+	const fileupload = document.getElementById("inputfile")
+	const seletedfile = fileupload.files[0];
+	const reader= new window.FileReader()
+	reader.readAsArrayBuffer(seletedfile)
+	reader.onloadend = () => {
+	    bufferfile= Buffer(reader.result)
+		//console.log("buffer", bufferfile)
+	}	
+	}
+	catch(err){
+		//err.message
+		alert("File unable to upload")
+	}	
+},
+
+uploadFile: function() {
+	//console.log("buffer", bufferfile)
+	
+}
+
 }
 
 window.addEventListener("load", function() {
