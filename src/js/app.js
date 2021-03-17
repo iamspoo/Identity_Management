@@ -3,6 +3,14 @@ import "../css/style.css"
 import { default as Web3} from "web3"
 import { default as contract } from "truffle-contract"
 
+/*const IpfsHttpClient = require("ipfs-http-client");
+const ipfsC = IpfsHttpClient({
+  host: "ipfs.infura.io",
+  port: "5001",
+  protocol: "https",
+}); */
+const node = await Ipfs.create()
+
 import identityartifact from "../../build/contracts/Identity.json"
 var IdentityContract = contract(identityartifact)
 var bufferfile = null;
@@ -124,8 +132,14 @@ captureFile: function(){
 },
 
 uploadFile: function() {
-	//console.log("buffer", bufferfile)
-	
+/*	//console.log("buffer", bufferfile)
+	ipfs.files.add(bufferfile, function (err, result) {
+  if (err) {
+    console.log(err)
+  } else {
+    console.log(result[0].hash)
+  }
+}) */
 }
 
 }
