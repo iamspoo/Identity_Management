@@ -9,7 +9,7 @@ const ipfsC = IpfsHttpClient({
   port: "5001",
   protocol: "https",
 }); */
-const node = await Ipfs.create()
+//const node = await Ipfs.create()
 
 import identityartifact from "../../build/contracts/Identity.json"
 var IdentityContract = contract(identityartifact)
@@ -24,6 +24,7 @@ window.App = {
 loginuser: function() {
 	var uname = $("#uname").val() 
 	var pword = $("#pword").val() 
+	
 	if (uname === "" || pword === ""){
 		alert("Username or password is empty");
 		return; 
@@ -50,7 +51,14 @@ loginuser: function() {
 
 adduser :function(){
 	var uname = $("#uname").val() 
-	var pword = $("#pword").val() 
+	var pword = $("#pword").val()
+	var cpword = $("#cpword").val()
+	
+	if (cpword!=pword){
+		alert("Confrim Password does match with the Password");
+		return;
+	}
+	
 	if (uname === "" || pword === ""){
 		alert("Username or password is empty");
 		return 
@@ -98,6 +106,12 @@ loginuser2: function() {
 adduser2 :function(){
 	var uname = $("#uname2").val() 
 	var pword = $("#pword2").val() 
+	var cpword = $("#cpword2").val()
+	
+	if (cpword!=pword){
+		alert("Confrim Password does match with the Password");
+		return;
+	}
 	if (uname === "" || pword === ""){
 		alert("Username or password is empty");
 		return 
@@ -112,6 +126,7 @@ adduser2 :function(){
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   })
+  
 },
 	
 captureFile: function(){
