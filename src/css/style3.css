@@ -1,21 +1,25 @@
 
 body{
-  background-color: rgb(199, 241, 247,0.5);
    font-family: 'Playfair Display', serif;
 
   }
+.aux{
+	 #background-image: background.jpeg;
+	background-color: rgb(199, 241, 247,0.5);
+}
   label{
     font-weight:500;
   }
   .box{
     border: 2px solid black;
-    background-color: powderblue;
+    background-color: white;
     width:90%;
     margin-left:auto;
     margin-right:auto;
     padding: 20px 10px 20px 10px;
     margin-top:20px;
     margin-bottom:20px;
+	border-radius: 25px;
   }
 
 .navbar.navbar-expand-lg.navbar-black.bg-dark{
@@ -30,5 +34,26 @@ body{
 
 .edclass{
 	margin-top:40px;
+}
+
+.loginlink{
+	font-weight: bold;
+}
+
+.allogin{
+	font-weight:300;
+	font-size: 15px;
+}
+
+.colour{
+	background-color:black;
+}
+
+.whitecolor{
+	color: white;
+}
+
+.bluecolor{
+	color: blue;
 }
 

@@ -14,6 +14,7 @@ module.exports = {
       { from: './src/signup.html', to: "signup.html" },
 	    { from: './src/main.html', to: "main.html" },
 	    { from: './src/css/style3.css', to: "style3.css" }
+		{ from: './src/images/background.jpeg', to: "background.jpeg" },
     ])
   ],
   module: {

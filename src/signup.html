@@ -11,61 +11,96 @@
   </head>
 
   <body>
-  <!-- background="/static/image4.jpg"-->
-
 
    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
           <a class="navbar-brand" href="/">Home</a>
   </nav>
+  
+  
+	<div class="container-fluid aux">
+   <br>
+  <br>
+  
     
-	<div class="container-fluid">
-    <div id="msg"></div>
-
-    <div class="row">
+    <div class="row" >
       <section class="col-lg-6 col-md-12">
         <div class="box">
         <h4 class="text-primary">User Signup</h4>
         <div>
         <div class="form-row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-lg-12 col-md-6">
             <label>Username:</label>
 			<input type="text" class="form-control" id="uname" name = 'username' placeholder = 'Username'>
           </div>
-         <div class="form-group col-md-6">
+         <div class="form-group col-lg-12 col-md-6">
             <label>Password</label>
             <input type="password" class="form-control" id="pword" name = "password" placeholder="Password">
+        </div>
+		<div class="form-group col-lg-12 col-md-6">
+            <label>Confirm Password</label>
+            <input type="password" class="form-control" id="cpword" name = "cpassword" placeholder="Confrim Password">
         </div>
         </div>
         <button type="submit" class="btn btn-primary" onclick="App.adduser()">Sign Up</button>
         </div>
+		<br>
+		 <a href="/"><span class="allogin" >Already have account? </span> <span class="loginlink"> Login</span> </a>
       </div>
         </section>
 		
+		<br>
+		<br>
 		
         <section class="col-lg-6 col-md-12">
         <div class="box">
         <h4 class="text-primary">Org Signup</h4>
         <div>
         <div class="form-row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-lg-12 col-md-6">
             <label>Username:</label>
 			<input type="text" class="form-control" id="uname2" name = 'username' placeholder = 'Username'>
           </div>
-         <div class="form-group col-md-6">
+         <div class="form-group col-lg-12 col-md-6">
             <label>Password</label>
             <input type="password" class="form-control" id="pword2" name = "password" placeholder="Password">
+        </div>
+		<div class="form-group col-lg-12 col-md-6">
+            <label>Confirm Password</label>
+            <input type="password" class="form-control" id="cpword2" name = "cpassword" placeholder="Confrim Password">
         </div>
         </div>
         <button type="submit" class="btn btn-primary" onclick="App.adduser2()">Sign Up</button>
         </div>
+		<br>
+		 <a href="/"><span class="allogin" >Already have account? </span> <span class="loginlink"> Login</span> </a>
       </div>
         </section>
-
+		
     </div>
+	<br>
+	<br>
   </div>
+  
+  <footer class="page-footer font-small unique-color-dark pt-4 colour">
+
+  <div class="container">
+    <ul class="list-unstyled list-inline text-center py-2">
+      <li class="list-inline-item">
+        <h5 class="mb-1 whitecolor">Already have account?</h5>
+      </li>
+      <li class="list-inline-item">
+        <a href="/" class="btn btn-outline-white btn-rounded whitecolor">Sign in!</a>
+      </li>
+    </ul>
+  </div>
+  <div class="footer-copyright text-center py-3 whitecolor">© 2020 Copyright:
+    <a class="bluecolor" href=/> Indentity Management System</a>
+  </div>
+</footer>
+  
   </body>
   
-  <!-- Optional JavaScript -->
+ 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

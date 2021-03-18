@@ -3,9 +3,13 @@ import "../css/style.css"
 import { default as Web3} from "web3"
 import { default as contract } from "truffle-contract"
 //import { IpfsHttpClient } from "ipfs-http-client"
-//const IpfsHttpClient = require("ipfs-http-client");
-
-//const node = ipfsC.create()
+/*const IpfsHttpClient = require("ipfs-http-client");
+const ipfsC = IpfsHttpClient({
+  host: "ipfs.infura.io",
+  port: "5001",
+  protocol: "https",
+}); */
+//const node = await Ipfs.create()
 
 //const ipfs = IpfsHttpClient('ipfs.infura.io',5001,{protocol: 'https'}); 
 import identityartifact from "../../build/contracts/Identity.json"
@@ -21,6 +25,7 @@ window.App = {
 loginuser: function() {
 	var uname = $("#uname").val() 
 	var pword = $("#pword").val() 
+	
 	if (uname === "" || pword === ""){
 		alert("Username or password is empty");
 		return; 
@@ -47,7 +52,14 @@ loginuser: function() {
 
 adduser :function(){
 	var uname = $("#uname").val() 
-	var pword = $("#pword").val() 
+	var pword = $("#pword").val()
+	var cpword = $("#cpword").val()
+	
+	if (cpword!=pword){
+		alert("Confrim Password does match with the Password");
+		return;
+	}
+	
 	if (uname === "" || pword === ""){
 		alert("Username or password is empty");
 		return 
@@ -95,6 +107,12 @@ loginuser2: function() {
 adduser2 :function(){
 	var uname = $("#uname2").val() 
 	var pword = $("#pword2").val() 
+	var cpword = $("#cpword2").val()
+	
+	if (cpword!=pword){
+		alert("Confrim Password does match with the Password");
+		return;
+	}
 	if (uname === "" || pword === ""){
 		alert("Username or password is empty");
 		return 
@@ -109,6 +127,7 @@ adduser2 :function(){
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   })
+  
 },
 	
 captureFile: function(){
