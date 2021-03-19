@@ -56,7 +56,7 @@ adduser :function(){
 	var cpword = $("#cpword").val()
 	
 	if (cpword!=pword){
-		alert("Confrim Password does match with the Password");
+		alert("The passwords donot match");
 		return;
 	}
 	
