@@ -67,6 +67,7 @@ adduser :function(){
 	IdentityContract.deployed().then(function(instance){
     instance.addUser(uname,pword).then(function(result){
 		alert("Thank you! for signing up")
+		window.location.replace("http://localhost:8080/");
     }).catch(function(err){ 
       console.log("ERROR! " + err.message)
       alert("Username already exists")
@@ -88,7 +89,7 @@ loginuser2: function() {
 		instance.validateOrg(uname,pword).then(function(data){	
       console.log(data);
       if(data==true){
-        window.location.replace("http://localhost:8080/main.html");
+        window.location.replace("http://localhost:8080/orgmain.html");
         return;
       }
       else{
@@ -120,6 +121,7 @@ adduser2 :function(){
 	IdentityContract.deployed().then(function(instance){
     instance.addOrg(uname,pword).then(function(result){
 		alert("Thank you! for signing up")
+		window.location.replace("http://localhost:8080/");
     }).catch(function(err){ 
       console.log("ERROR! " + err.message)
       alert("Username already exists")
