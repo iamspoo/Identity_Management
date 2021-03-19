@@ -88,7 +88,7 @@ loginuser2: function() {
 		instance.validateOrg(uname,pword).then(function(data){	
       console.log(data);
       if(data==true){
-        window.location.replace("http://localhost:8080/main.html");
+        window.location.replace("http://localhost:8080/orgmain.html");
         return;
       }
       else{
