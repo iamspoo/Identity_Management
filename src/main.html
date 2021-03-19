@@ -6,14 +6,19 @@
     <title>Identity Management System</title>
     <script src="https://cdn.jsdelivr.net/npm/ipfs-http-client/dist/index.min.js"></script>
 
-	<style>
-	.buttonlink { 
-            background-color: white; 
-        } 
-	</style>
-
+	
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-    
+    <style>
+      body{
+        margin:0px;
+      }
+      .row{
+        margin:30px 10px;
+      }
+      form{
+        margin-bottom:50px;
+      }
+    </style>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -21,12 +26,78 @@
 		  
     </nav>
 	
-	<br>
-	<br>
-	<form >
-	<input type="file" id="inputfile" onchange="App.captureFile()"/>
-	<button type="button" class="btn btn-dark" onclick="App.uploadFile()">Submit</button>
-	</form>
+	
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-8">
+          <h4>Pending requests</h4>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Organisation</th>
+                <th scope="col">Take Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Abc</td>
+                <td><button class="btn btn-success" style="margin-right:10px">Approve</button><button class="btn btn-danger">Decline</button></td>
+              </tr>
+              <tr>
+                <td>Hij</td>
+                <td><button class="btn btn-success" style="margin-right:10px">Approve</button><button class="btn btn-danger">Decline</button></td>
+              </tr>
+              <tr>
+                <td>Def</td>
+                <td><button class="btn btn-success" style="margin-right:10px">Approve</button><button class="btn btn-danger">Decline</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-4">
+          <form>
+            <h4>Upload ID</h4>
+            <br>
+            <input class="form-control" type="file" id="inputfile" onchange="App.captureFile()">
+            <br>
+            <button type="button" class="btn btn-dark" onclick="App.uploadFile()">Submit</button>
+            </form>
+            <h4>View ID</h4>
+            <br>
+            <button class="btn btn-primary">View</button>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-8">
+          <h4>Older requests</h4>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Organisation</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Org1</td>
+                <td><button class="btn btn-success">Approved</button></td>
+              </tr>
+              <tr>
+                <td>Org2</td>
+                <td><button class="btn btn-danger">Declined</button></td>
+              </tr>
+              <tr>
+                <td>Org3</td>
+                <td><button class="btn btn-success">Approved</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+	
 		
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
