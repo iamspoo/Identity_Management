@@ -4,8 +4,10 @@ body{
 
   }
 .aux{
-	 #background-image: background.jpeg;
-	background-color: rgb(199, 241, 247,0.5);
+	background-image: url("background.jpeg");
+	 #background-repeat: no-repeat;
+	  #background-size: cover;
+	#background-color: rgb(199, 241, 247,0.5);
 }
   label{
     font-weight:500;

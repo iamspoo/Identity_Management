@@ -16,6 +16,9 @@ module.exports = {
 	    { from: './src/css/style3.css', to: "style3.css" },
 		{ from: './src/images/background.jpeg', to: "background.jpeg" },
 		{from: './src/orgmain.html', to: "orgmain.html" },
+		{ from: './src/images/image1.jpg', to: "image1.jpg" },
+		{ from: './src/images/image2.jpg', to: "image2.jpg" },
+		{ from: './src/images/image3.jpg', to: "image3.jpg" },
     ])
   ],
   module: {

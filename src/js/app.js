@@ -67,6 +67,7 @@ adduser :function(){
 	IdentityContract.deployed().then(function(instance){
     instance.addUser(uname,pword).then(function(result){
 		alert("Thank you! for signing up")
+		window.location.replace("http://localhost:8080/");
     }).catch(function(err){ 
       console.log("ERROR! " + err.message)
       alert("Username already exists")
@@ -120,6 +121,7 @@ adduser2 :function(){
 	IdentityContract.deployed().then(function(instance){
     instance.addOrg(uname,pword).then(function(result){
 		alert("Thank you! for signing up")
+		window.location.replace("http://localhost:8080/");
     }).catch(function(err){ 
       console.log("ERROR! " + err.message)
       alert("Username already exists")
