@@ -150,14 +150,14 @@ captureFile: function(){
 },
 
 uploadFile: function() {
-	console.log("buffer", bufferfile)
   const ipfs = window.IpfsHttpClient({
-  host: 'ipfs.infura.io',
+  host: 'localhost',
   port: 5001,
-  protocol: 'https',
-  apiPath: '/api/v0'
+  protocol: 'http',
+  apiPath: '/ip4/127.0.0.1/tcp/5001'
 }); 
-	ipfs.add(bufferfile, (err, result) => {
+/*const ipfs = window.IpfsHttpClient('localhost', 5001)*/
+ipfs.add(bufferfile, (err, result) => {
   console.log(result[0].hash);
   if (err) {
     console.log(err);
