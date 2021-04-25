@@ -5,6 +5,8 @@ import { default as contract } from "truffle-contract"
 import identityartifact from "../../build/contracts/Identity.json"
 var IdentityContract = contract(identityartifact)
 var bufferfile = null;
+var username="gayatri";
+var crypto = require('crypto');
 
 window.App = {
   start: function() { 
@@ -25,6 +27,7 @@ loginuser: function() {
       console.log(data);
       if(data==true){
         window.location.replace("http://localhost:8080/main.html");
+		username = uname;
         return;
       }
       else{
@@ -41,6 +44,17 @@ loginuser: function() {
 },
 
 adduser :function(){
+	    var characters = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";  
+		var lenString = 7;  
+    var randomstring = '';  
+	 for (var i=0; i<lenString; i++) {  
+        var rnum = Math.floor(Math.random() * characters.length);  
+        randomstring += characters.substring(rnum, rnum+1);  
+    }  
+	/*const min=1;
+	const max=100000;
+	var key = Math.floor(Math.random() * (max - min + 1) ) + min;*/
+	console.log(randomstring);
 	var uname = $("#uname").val() 
 	var pword = $("#pword").val()
 	var cpword = $("#cpword").val()
@@ -143,13 +157,36 @@ uploadFile: function() {
 	console.log("buffer", bufferfile)
   const ipfs = window.IpfsApi('localhost', 5001)
 	ipfs.add(bufferfile, (err, result) => {
-  console.log(result[0].hash);
-  if (err) {
-    console.log(err);
-  }
+  const imghash = String(result[0].hash)
+  //console.log("hash"+imghash);
+  var mykey = crypto.createCipher('aes-128-cbc',key);
+  var mystr = mykey.update(imghash, 'utf8', 'hex')
+  mystr += mykey.final('hex');
+ // console.log("encrypted"+mystr);
+
+ /* var mykey1 = crypto.createDecipher('aes-128-cbc', 'mypassword');
+  var mystr1 = mykey1.update(mystr, 'hex', 'utf8')
+  mystr1 += mykey1.final('utf8');
+  console.log(mystr1); */
+
+  IdentityContract.deployed().then(function(instance){
+	  instance.storeimghash(mystr,username).then(function(data){	
+      if(data==true){
+        alert("image uploaded");
+        return;
+	  }
+	  else{
+		  alert("unable to upload image")
+	  }
+	  }).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+	  return;
+    })	
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  })  
 }) 
-console.log("over");
-}
+},
 
 }
 

@@ -14,6 +14,8 @@ contract Identity {
     struct User {
         bytes32 password; 
         bool doesExist; 
+		bytes32 imghash;
+		bytes32 key;
     }
     
     struct Organisation {
@@ -26,7 +28,7 @@ contract Identity {
 
     function addUser(bytes32 username, bytes32 pswd) onlyOwner public {
         if (users[username].doesExist == false){
-            users[username] = User(pswd,true);
+            users[username] = User(pswd,true,"","");
         }
         else{
             revert("Username already exists");
@@ -55,5 +57,9 @@ contract Identity {
         }
         return false;
     }
+	
+	function storeimghash(bytes32 hash, bytes32 username) public returns (bool){
+		users[username].imghash = hash;
+	}
 
 }
