@@ -5,8 +5,9 @@ import { default as contract } from "truffle-contract"
 import identityartifact from "../../build/contracts/Identity.json"
 var IdentityContract = contract(identityartifact)
 var bufferfile = null;
-var username="gayatri";
+var username="admin";
 var crypto = require('crypto');
+const b58 = require('b58');
 
 window.App = {
   start: function() { 
@@ -157,36 +158,62 @@ uploadFile: function() {
 	console.log("buffer", bufferfile)
   const ipfs = window.IpfsApi('localhost', 5001)
 	ipfs.add(bufferfile, (err, result) => {
-  const imghash = String(result[0].hash)
-  //console.log("hash"+imghash);
-  var mykey = crypto.createCipher('aes-128-cbc',key);
-  var mystr = mykey.update(imghash, 'utf8', 'hex')
-  mystr += mykey.final('hex');
- // console.log("encrypted"+mystr);
+    if (err) {
+      alert("Error in uploading image");
+      console.log(err);
+    }
+    else{
+      var imghash = String(result[0].hash);
+      console.log(imghash)
+      var username="admin";
+      imghash="0x"+b58.decode(imghash).slice(2).toString('hex');
+      /*var mykey = crypto.createCipher('aes-128-cbc',key);
+      var mystr = mykey.update(imghash, 'utf8', 'hex');
+      mystr += mykey.final('hex');*/
 
- /* var mykey1 = crypto.createDecipher('aes-128-cbc', 'mypassword');
-  var mystr1 = mykey1.update(mystr, 'hex', 'utf8')
-  mystr1 += mykey1.final('utf8');
-  console.log(mystr1); */
+      IdentityContract.deployed().then(function(instance){
+        instance.storeimghash(imghash,username).then(function(result){
+          alert("Image uploaded succesfully");
+        }).catch(function(err){ 
+          console.log("ERROR! " + err.message)
+          alert("Username doesnot exist-app")
+        })
+      }).catch(function(err){ 
+        console.log("ERROR! " + err.message)
+      })
+    }
+  })
+},
 
-  IdentityContract.deployed().then(function(instance){
-	  instance.storeimghash(mystr,username).then(function(data){	
-      if(data==true){
-        alert("image uploaded");
+viewid: function() {
+  console.log(username)
+	IdentityContract.deployed().then(function(instance){
+		instance.getHash(username).then(function(data){	
+      if(data!=""){
+        /*var mykey1 = crypto.createDecipher('aes-128-cbc', 'mypassword');
+        var mystr1 = mykey1.update(mystr, 'hex', 'utf8')
+        mystr1 += mykey1.final('utf8');
+        console.log(mystr1);*/
+        const hashHex = "1220" + data.slice(2)
+        const hashBytes = Buffer.from(hashHex, 'hex');
+        const hashStr = b58.encode(hashBytes)
+        console.log(hashStr);
+        var s="http://localhost:8081/ipfs/"+hashStr;
+        window.location.replace(s);
         return;
-	  }
-	  else{
-		  alert("unable to upload image")
-	  }
-	  }).catch(function(err){ 
+      }
+      else{
+        alert("Invalid username or password");
+		    return; 
+      }
+	}).catch(function(err){ 
       console.log("ERROR! " + err.message)
 	  return;
     })	
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   })  
-}) 
-},
+}
 
 }
 

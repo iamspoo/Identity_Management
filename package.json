@@ -29,6 +29,8 @@
     "webpack-dev-server": "^2.10.1"
   },
   "dependencies": {
+    "b58": "^4.0.3",
+    "bs58": "file:node_modules/bs58",
     "ipfs-http-client": "^49.0.4"
   }
 }
