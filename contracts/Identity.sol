@@ -59,15 +59,13 @@ contract Identity {
     }
 	
     function storeimghash(bytes32 hash, bytes32 username) onlyOwner public {
-        /*if (users[username].doesExist == true){
+        if (users[username].doesExist == true){
             users[username].imghash = hash;
         }
         else{
             revert("Username doesnot exist");
 
-        }*/
-        users[username].imghash = hash;
-
+        }
     }
     function getHash(bytes32 username) view public returns (bytes32) {
         return users[username].imghash;
