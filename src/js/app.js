@@ -96,6 +96,7 @@ loginuser2: function() {
       console.log(data);
       if(data==true){
         window.location.replace("http://localhost:8080/orgmain.html");
+			sessionStorage.setItem("orgname",uname); 
         return;
       }
       else{
@@ -187,9 +188,8 @@ uploadFile: function() {
 },
 
 viewid: function() {
-  console.log(username)
 	IdentityContract.deployed().then(function(instance){
-		instance.getHash(username).then(function(data){	
+		instance.getHash(sessionStorage.getItem("username")).then(function(data){	
       if(data!=""){
         /*var mykey1 = crypto.createDecipher('aes-128-cbc', 'mypassword');
         var mystr1 = mykey1.update(mystr, 'hex', 'utf8')
@@ -214,7 +214,22 @@ viewid: function() {
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   })  
-}
+},
+
+requestId: function() {
+	var uname = $("#usernameRequest").val();
+	IdentityContract.deployed().then(function(instance){
+		instance.organisationRequest(uname,sessionStorage.getItem("orgname")).then(function(data){	
+			alert("reqested");
+	}).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+	  alert("unable to request");
+	  return;
+    })
+	}).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  })  
+},
 
 }
 
@@ -240,3 +255,5 @@ window.addEventListener("load", function() {
   }
   window.App.start()
 })
+
+//https://medium.com/robhitchens/enforcing-referential-integrity-in-ethereum-smart-contracts-a9ab1427ff42
