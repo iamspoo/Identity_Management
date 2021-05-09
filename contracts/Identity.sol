@@ -16,11 +16,13 @@ contract Identity {
         bool doesExist; 
 		bytes32 imghash;
 		bytes32 key;
+		mapping(bytes32 => bytes32) orgrequest;
     }
     
     struct Organisation {
         bytes32 password; 
         bool doesExist; 
+		mapping(bytes32 => bytes32) usergrants;
     }
     
     mapping (bytes32 => User) users;
@@ -71,4 +73,8 @@ contract Identity {
         return users[username].imghash;
     }
 
+	function organisationRequest(bytes32 requestUsername, bytes32 orgUsername)onlyOwner public{
+			users[requestUsername].orgrequest[orgUsername] = "request";
+			org[orgUsername].usergrants[requestUsername] = "requestSent";
+	}
 }
