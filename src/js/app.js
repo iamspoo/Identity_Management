@@ -145,7 +145,9 @@ captureFile: function(){
 	reader.readAsArrayBuffer(seletedfile)
 	reader.onloadend = () => {
 	    bufferfile= Buffer(reader.result)
-		//console.log("buffer", bufferfile)
+      //var cipher = crypto.createCipheriv('aes-128-cbc',"pwdkey","ivstr")
+      //var bufferfile = Buffer.concat([cipher.update(bufferfile),cipher.final()]);
+      //console.log("buffer", bufferfile)
 	}	
 	}
 	catch(err){
