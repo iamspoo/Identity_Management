@@ -171,6 +171,7 @@ uploadFile: function() {
       console.log(imghash)
       var username="admin";
       imghash="0x"+b58.decode(imghash).slice(2).toString('hex');
+      console.log(imghash)
       /*var mykey = crypto.createCipher('aes-128-cbc',key);
       var mystr = mykey.update(imghash, 'utf8', 'hex');
       mystr += mykey.final('hex');*/
@@ -206,7 +207,7 @@ viewid: function() {
         return;
       }
       else{
-        alert("Invalid username or password");
+        alert("Error in viewing ID");
 		    return; 
       }
 	}).catch(function(err){ 
@@ -221,8 +222,8 @@ viewid: function() {
 requestId: function() {
 	var uname = $("#usernameRequest").val();
 	IdentityContract.deployed().then(function(instance){
-		instance.organisationRequest(uname,sessionStorage.getItem("orgname")).then(function(data){	
-			alert("reqested");
+		instance.requestUser(uname,sessionStorage.getItem("orgname")).then(function(data){	
+			alert("Reqested");
 	}).catch(function(err){ 
       console.log("ERROR! " + err.message)
 	  alert("unable to request");
@@ -233,8 +234,57 @@ requestId: function() {
   })  
 },
 
-}
+respondReq: function() {
+	//var uname = $("#usernameRequest").val();
+  var response="approve";
+  var orgname="org";
+	IdentityContract.deployed().then(function(instance){
+		instance.respondToRequest(sessionStorage.getItem("username"),orgname,response).then(function(data){	
+			alert(response);
+	}).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+	  alert("unable to respond");
+	  return;
+    })
+	}).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  })  
+},
 
+orgViewId: function() {
+  var uname = $("#usernameView").val();
+  console.log(uname)
+  console.log(sessionStorage.getItem("orgname"))
+  IdentityContract.deployed().then(function(instance){
+		instance.orgViewId(uname,sessionStorage.getItem("orgname")).then(function(data){	
+      
+      if(data!="declined"){
+        /*var mykey1 = crypto.createDecipher('aes-128-cbc', 'mypassword');
+        var mystr1 = mykey1.update(mystr, 'hex', 'utf8')
+        mystr1 += mykey1.final('utf8');
+        console.log(mystr1);*/
+        console.log(data)
+        const hashHex = "1220" + data.slice(2)
+        const hashBytes = Buffer.from(hashHex, 'hex');
+        const hashStr = b58.encode(hashBytes)
+        console.log(hashStr);
+        var s="http://localhost:8081/ipfs/"+hashStr;
+        window.location.replace(s);
+        return;
+      }
+      else{
+        alert("Error in viewing ID");
+		    return; 
+      }
+	}).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+	  return;
+    })	
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  })  
+}
+}
 window.addEventListener("load", function() {
   if (window.ethereum) {
     const web3 = new Web3(window.ethereum);
