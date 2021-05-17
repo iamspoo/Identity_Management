@@ -222,7 +222,7 @@ viewid: function() {
 requestId: function() {
 	var uname = $("#usernameRequest").val();
 	IdentityContract.deployed().then(function(instance){
-		instance.requestUser(uname,sessionStorage.getItem("orgname")).then(function(data){	
+		instance.requestUser(uname,sessionStorage.getItem("orgname")).then(function(result){	
 			alert("Reqested");
 	}).catch(function(err){ 
       console.log("ERROR! " + err.message)
@@ -235,15 +235,15 @@ requestId: function() {
 },
 
 respondReq: function() {
-	//var uname = $("#usernameRequest").val();
-  var response="approve";
-  var orgname="sindhura";
+  var response=1;
+  var orgname="oo";
+  console.log(sessionStorage.getItem("username"))
 	IdentityContract.deployed().then(function(instance){
 		instance.respondToRequest(sessionStorage.getItem("username"),orgname,response).then(function(data){	
-			alert(response);
+			alert("Responded");
 	}).catch(function(err){ 
       console.log("ERROR! " + err.message)
-	  alert("unable to respond");
+	  alert("Unable to respond");
 	  return;
     })
 	}).catch(function(err){ 
@@ -251,19 +251,42 @@ respondReq: function() {
   })  
 },
 
+logger: function(){
+  IdentityContract.deployed().then(function(instance){
+    var strlog = instance.mystr();
+    strlog.watch();
+    strlog.get(function(err, result){
+      console.log(err);
+      console.log(result);
+    })
+    var intlog = instance.mylog();
+    intlog.watch();
+    intlog.get(function(err, result){
+      console.log(err);
+      console.log(result);
+    })
+
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  })
+},
+
 orgViewId: function() {
   var uname = $("#usernameView").val();
-  console.log(uname)
-  console.log(sessionStorage.getItem("orgname"))
   IdentityContract.deployed().then(function(instance){
 		instance.orgViewId(uname,sessionStorage.getItem("orgname")).then(function(data){	
-      
-      if(data!="declined"){
+      var hex  = data.toString();
+      var str = '';
+      for (var n = 0; n < hex.length; n += 2) {
+        str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+      }
+      var n=str.localeCompare("declined")
+      if(n!=0){
         /*var mykey1 = crypto.createDecipher('aes-128-cbc', 'mypassword');
         var mystr1 = mykey1.update(mystr, 'hex', 'utf8')
         mystr1 += mykey1.final('utf8');
         console.log(mystr1);*/
-        console.log(data)
+        console.log(str)
         const hashHex = "1220" + data.slice(2)
         const hashBytes = Buffer.from(hashHex, 'hex');
         const hashStr = b58.encode(hashBytes)
