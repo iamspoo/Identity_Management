@@ -237,7 +237,7 @@ requestId: function() {
 respondReq: function() {
 	//var uname = $("#usernameRequest").val();
   var response="approve";
-  var orgname="org";
+  var orgname="sindhura";
 	IdentityContract.deployed().then(function(instance){
 		instance.respondToRequest(sessionStorage.getItem("username"),orgname,response).then(function(data){	
 			alert(response);
@@ -283,7 +283,22 @@ orgViewId: function() {
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   })  
-}
+},
+
+
+userorglist: function() {
+	var user,response;
+	IdentityContract.deployed().then(function(instance){
+		instance.getorgarrreponse(sessionStorage.getItem("username")).then(function(data){
+			alert(data);
+			}).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+	  return;
+    })	
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  })  
+},
 }
 window.addEventListener("load", function() {
   if (window.ethereum) {

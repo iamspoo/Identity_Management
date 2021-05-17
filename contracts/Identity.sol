@@ -120,5 +120,14 @@ contract Identity {
         }
         return "declined";
     }
+	
+	function getorgarrreponse(bytes32 username)view public returns (bytes32[] memory){
+		return (users[username].orgarr);
+	}
+	
+	
+	function getuserarrstatususerhash(bytes32 orgname)view public returns (bytes32[] memory,bytes32[] memory, bytes32[] memory){
+		return (org[orgname].userarr, org[orgname].status,org[orgname].userhash);
+	}
 
 }
