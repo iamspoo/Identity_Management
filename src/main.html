@@ -36,27 +36,10 @@
       <div class="row">
         <div class="col-md-8">
           <h4>Pending requests</h4>
-          <table class="table table-striped">
+          <table id="table1" class='table table-striped'>
             <thead>
-              <tr>
-                <th scope="col">Organisation</th>
-                <th scope="col">Take Action</th>
-              </tr>
+              <tr><th scope='col'>Organisation</th><th scope='col'>Take Action</th></tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Abc</td>
-                <td><button class="btn btn-success" style="margin-right:10px" onclick="App.respondReq()">Approve</button><button class="btn btn-danger" onclick="App.respondReq()">Decline</button></td>
-              </tr>
-              <tr>
-                <td>Hij</td>
-                <td><button class="btn btn-success" style="margin-right:10px">Approve</button><button class="btn btn-danger" onclick="App.logger()">Decline</button></td>
-              </tr>
-              <tr>
-                <td>Def</td>
-                <td><button class="btn btn-success" style="margin-right:10px">Approve</button><button class="btn btn-danger">Decline</button></td>
-              </tr>
-            </tbody>
           </table>
         </div>
         <div class="col-md-4">
@@ -77,27 +60,13 @@
       <div class="row">
         <div class="col-md-8">
           <h4>Older requests</h4>
-          <table class="table table-striped">
+          <table id="table2" class="table table-striped">
             <thead>
               <tr>
                 <th scope="col">Organisation</th>
                 <th scope="col">Status</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Org1</td>
-                <td><button class="btn btn-success">Approved</button></td>
-              </tr>
-              <tr>
-                <td>Org2</td>
-                <td><button class="btn btn-danger">Declined</button></td>
-              </tr>
-              <tr>
-                <td>Org3</td>
-                <td><button class="btn btn-success">Approved</button></td>
-              </tr>
-            </tbody>
           </table>
         </div>
       </div>

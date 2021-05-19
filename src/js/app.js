@@ -235,8 +235,8 @@ requestId: function() {
 },
 
 respondReq: function() {
-  var response=1;
-  var orgname="sindhura";
+  var response=2;
+  var orgname="org2";
   console.log(sessionStorage.getItem("username"))
 	IdentityContract.deployed().then(function(instance){
 		instance.respondToRequest(sessionStorage.getItem("username"),orgname,response).then(function(data){	
@@ -311,85 +311,100 @@ orgViewId: function() {
 
 userorglist: function() {
 	var n;	
-IdentityContract.deployed().then(function(instance){
-		instance.getorgarrlength(sessionStorage.getItem("username")).then(function(data){
-			n=data;
-			sessionStorage.setItem("n",n.c[0]);
-			}).catch(function(err){ 
+  IdentityContract.deployed().then(async function(instance){
+        await instance.getorgarrlength(sessionStorage.getItem("username")).then(function(data){
+        n=data;
+        sessionStorage.setItem("n",n.c[0]);
+        }).catch(function(err){ 
+        console.log("ERROR! " + err.message)
+      return;
+      })	
+    }).catch(function(err){ 
       console.log("ERROR! " + err.message)
-	  return;
-    })	
+    }) 
+
+  var n= sessionStorage.getItem("n");
+  console.log(n);
+  
+  IdentityContract.deployed().then(async function(instance){
+    sessionStorage.setItem("pendingstr","");
+    sessionStorage.setItem("olderstr","");
+    var pendingstr="<tbody>";
+    var olderstr="<tbody>";
+    for(var i=0; i<n; i++){
+      await instance.getorgarrreponse(i,sessionStorage.getItem("username")).then(function(data){
+      var hex  = data[0].toString();
+      var str = '';
+      for (var k = 0; k < hex.length; k += 2) {
+        str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
+      }
+      if(data[1].c[0]===0){
+        pendingstr+="<tr><td>"+str+"</td><td><button class='btn btn-success' style='margin-right:10px' onclick='App.respondReq()'>Approve</button><button class='btn btn-danger' onclick='App.respondReq()'>Decline</button></td></tr>";
+        sessionStorage.setItem("pendingstr",pendingstr);
+      }
+      else if(data[1].c[0]===1){
+        olderstr+="<tr><td>"+str+"</td><td><button class='btn btn-success'>Approved</button></td></tr>";
+        sessionStorage.setItem("olderstr",olderstr);
+      }
+      else{
+        olderstr+="<tr><td>"+str+"</td><td><button class='btn btn-danger'>Declined</button></td></tr>";
+        sessionStorage.setItem("olderstr",olderstr);
+      } 
+      }).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+    return;
+    })	}
+    var pendingstr= sessionStorage.getItem("pendingstr");
+    var olderstr= sessionStorage.getItem("olderstr");    
+    pendingstr+="</tbody>";
+    olderstr+="</tbody>";
+    $("#table1").append(pendingstr);
+    $("#table2").append(olderstr);
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   }) 
-
-
-var orgarr = [];
-var response = [];
-var n= sessionStorage.getItem("n");
-console.log(n);
-	IdentityContract.deployed().then(function(instance){
-		for(var i=0; i<n; i++){
-		instance.getorgarrreponse(i,sessionStorage.getItem("username")).then(function(data){
-			var hex  = data[0].toString();
-			var str = '';
-			for (var k = 0; k < hex.length; k += 2) {
-				str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
-			}
-			orgarr.push(str);
-			response.push(data[1].c[0]);
-			console.log(orgarr[0],response[0]);
-			console.log(orgarr[1],response[1]);
-			}).catch(function(err){ 
-      console.log("ERROR! " + err.message)
-	  return;
-		})	}
-  }).catch(function(err){ 
-    console.log("ERROR! " + err.message)
-  })  
-
+  
 },
 
 
 organisationuserlist: function() {
 	var n;	
-IdentityContract.deployed().then(function(instance){
-		instance.getuserarrlength(sessionStorage.getItem("orgname")).then(function(data){
-			n=data;
-			sessionStorage.setItem("on",n.c[0]);
-			}).catch(function(err){ 
+  IdentityContract.deployed().then(function(instance){
+      instance.getuserarrlength(sessionStorage.getItem("orgname")).then(function(data){
+        n=data;
+        sessionStorage.setItem("on",n.c[0]);
+        }).catch(function(err){ 
+        console.log("ERROR! " + err.message)
+      return;
+      })	
+    }).catch(function(err){ 
       console.log("ERROR! " + err.message)
-	  return;
-    })	
-  }).catch(function(err){ 
-    console.log("ERROR! " + err.message)
-  }) 
+    }) 
 
 
-var userarr = [];
-var requeststatus = [];
-var n= sessionStorage.getItem("on");
-console.log(n);
-	IdentityContract.deployed().then(function(instance){
-		for(var i=0; i<n; i++){
-		instance.getuserarrstatus(i,sessionStorage.getItem("orgname")).then(function(data){
-			var hex  = data[0].toString();
-			var str = '';
-			for (var k = 0; k < hex.length; k += 2) {
-				str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
-			}
-			userarr.push(str);
-			requeststatus.push(data[1].c[0]);
-			console.log(userarr[0],requeststatus[0]);
-			console.log(userarr[1],requeststatus[1]);
-			}).catch(function(err){ 
+  var userarr = [];
+  var requeststatus = [];
+  var n= sessionStorage.getItem("on");
+  console.log(n);
+    IdentityContract.deployed().then(function(instance){
+      for(var i=0; i<n; i++){
+      instance.getuserarrstatus(i,sessionStorage.getItem("orgname")).then(function(data){
+        var hex  = data[0].toString();
+        var str = '';
+        for (var k = 0; k < hex.length; k += 2) {
+          str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
+        }
+        userarr.push(str);
+        requeststatus.push(data[1].c[0]);
+        console.log(userarr[0],requeststatus[0]);
+        console.log(userarr[1],requeststatus[1]);
+        }).catch(function(err){ 
+        console.log("ERROR! " + err.message)
+      return;
+      })	}
+    }).catch(function(err){ 
       console.log("ERROR! " + err.message)
-	  return;
-		})	}
-  }).catch(function(err){ 
-    console.log("ERROR! " + err.message)
-  })  
-
+    })  
 },
 
 }

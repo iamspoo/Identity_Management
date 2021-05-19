@@ -1,8 +1,6 @@
 pragma solidity 0.5.16;
 
 contract Identity {
-    event mylog(uint n,uint m);
-    event mystr(bytes32 val);
     address owner;
     constructor() public {
         owner=msg.sender;
@@ -89,8 +87,6 @@ contract Identity {
     function respondToRequest(bytes32 requestUsername, bytes32 orgUsername, int response)onlyOwner public{
         uint i=0;
         uint j=0;
-        //emit mystr(requestUsername);
-        //emit mystr(orgUsername);
         uint n=users[requestUsername].orgarr.length;
         uint m=org[orgUsername].userarr.length;
         while((users[requestUsername].orgarr[i]!=orgUsername) && (i<n)){
