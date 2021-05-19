@@ -236,7 +236,7 @@ requestId: function() {
 
 respondReq: function() {
   var response=1;
-  var orgname="oo";
+  var orgname="sindhura";
   console.log(sessionStorage.getItem("username"))
 	IdentityContract.deployed().then(function(instance){
 		instance.respondToRequest(sessionStorage.getItem("username"),orgname,response).then(function(data){	
@@ -315,7 +315,6 @@ IdentityContract.deployed().then(function(instance){
 		instance.getorgarrlength(sessionStorage.getItem("username")).then(function(data){
 			n=data;
 			sessionStorage.setItem("n",n.c[0]);
-			console.log(data);
 			}).catch(function(err){ 
       console.log("ERROR! " + err.message)
 	  return;
@@ -328,8 +327,9 @@ IdentityContract.deployed().then(function(instance){
 var orgarr = [];
 var response = [];
 var n= sessionStorage.getItem("n");
-for(var i=0; i<n; i+=1){
+console.log(n);
 	IdentityContract.deployed().then(function(instance){
+		for(var i=0; i<n; i++){
 		instance.getorgarrreponse(i,sessionStorage.getItem("username")).then(function(data){
 			var hex  = data[0].toString();
 			var str = '';
@@ -337,16 +337,17 @@ for(var i=0; i<n; i+=1){
 				str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
 			}
 			orgarr.push(str);
-			response.push(data[1]);
-			console.log(orgarr[0],orgarr[1]);
+			response.push(data[1].c[0]);
+			console.log(orgarr[0],response[0]);
+			console.log(orgarr[1],response[1]);
 			}).catch(function(err){ 
       console.log("ERROR! " + err.message)
 	  return;
-    })	
+		})	}
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   })  
-}
+
 },
 
 }
@@ -372,5 +373,3 @@ window.addEventListener("load", function() {
   }
   window.App.start()
 })
-
-//https://medium.com/robhitchens/enforcing-referential-integrity-in-ethereum-smart-contracts-a9ab1427ff42
