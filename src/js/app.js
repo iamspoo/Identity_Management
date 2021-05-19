@@ -350,6 +350,48 @@ console.log(n);
 
 },
 
+
+organisationuserlist: function() {
+	var n;	
+IdentityContract.deployed().then(function(instance){
+		instance.getuserarrlength(sessionStorage.getItem("orgname")).then(function(data){
+			n=data;
+			sessionStorage.setItem("on",n.c[0]);
+			}).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+	  return;
+    })	
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  }) 
+
+
+var userarr = [];
+var requeststatus = [];
+var n= sessionStorage.getItem("on");
+console.log(n);
+	IdentityContract.deployed().then(function(instance){
+		for(var i=0; i<n; i++){
+		instance.getuserarrstatus(i,sessionStorage.getItem("orgname")).then(function(data){
+			var hex  = data[0].toString();
+			var str = '';
+			for (var k = 0; k < hex.length; k += 2) {
+				str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
+			}
+			userarr.push(str);
+			requeststatus.push(data[1].c[0]);
+			console.log(userarr[0],requeststatus[0]);
+			console.log(userarr[1],requeststatus[1]);
+			}).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+	  return;
+		})	}
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  })  
+
+},
+
 }
 window.addEventListener("load", function() {
   if (window.ethereum) {

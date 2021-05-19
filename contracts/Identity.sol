@@ -123,4 +123,12 @@ contract Identity {
 	 function getorgarrreponse(uint i,bytes32 username) view public returns (bytes32,int) {
         return (users[username].orgarr[i],users[username].response[i]);
     }
+	
+	function getuserarrlength(bytes32 orgname)view public returns (uint){
+		return org[orgname].status.length;
+	}
+	
+	 function getuserarrstatus(uint i,bytes32 orgname) view public returns (bytes32,int) {
+        return (org[orgname].userarr[i],org[orgname].status[i]);
+    }
 }
