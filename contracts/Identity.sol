@@ -30,6 +30,7 @@ contract Identity {
     
     mapping (bytes32 => User) users;
     mapping (bytes32 => Organisation) org;
+	
 
     function addUser(bytes32 username, bytes32 pswd) onlyOwner public {
         if (users[username].doesExist == false){
@@ -115,13 +116,11 @@ contract Identity {
         return "declined";
     }
 	
-	function getorgarrreponse(bytes32 username)view public returns (bytes32[] memory){
-		return (users[username].orgarr);
+	function getorgarrlength(bytes32 username)view public returns (uint){
+		return users[username].response.length;
 	}
 	
-	
-	function getuserarrstatususerhash(bytes32 orgname)view public returns (bytes32[] memory,bytes32[] memory, bytes32[] memory){
-		return (org[orgname].userarr, org[orgname].status,org[orgname].userhash);
-	}
-
+	 function getorgarrreponse(uint i,bytes32 username) view public returns (bytes32,int) {
+        return (users[username].orgarr[i],users[username].response[i]);
+    }
 }

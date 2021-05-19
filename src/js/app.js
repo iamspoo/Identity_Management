@@ -310,10 +310,35 @@ orgViewId: function() {
 
 
 userorglist: function() {
-	var user,response;
+	var n;	
+IdentityContract.deployed().then(function(instance){
+		instance.getorgarrlength(sessionStorage.getItem("username")).then(function(data){
+			n=data;
+			sessionStorage.setItem("n",n.c[0]);
+			console.log(data);
+			}).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+	  return;
+    })	
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  }) 
+
+
+var orgarr = [];
+var response = [];
+var n= sessionStorage.getItem("n");
+for(var i=0; i<n; i+=1){
 	IdentityContract.deployed().then(function(instance){
-		instance.getorgarrreponse(sessionStorage.getItem("username")).then(function(data){
-			alert(data);
+		instance.getorgarrreponse(i,sessionStorage.getItem("username")).then(function(data){
+			var hex  = data[0].toString();
+			var str = '';
+			for (var k = 0; k < hex.length; k += 2) {
+				str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
+			}
+			orgarr.push(str);
+			response.push(data[1]);
+			console.log(orgarr[0],orgarr[1]);
 			}).catch(function(err){ 
       console.log("ERROR! " + err.message)
 	  return;
@@ -321,7 +346,9 @@ userorglist: function() {
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   })  
+}
 },
+
 }
 window.addEventListener("load", function() {
   if (window.ethereum) {
