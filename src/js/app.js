@@ -234,10 +234,8 @@ requestId: function() {
   })  
 },
 
-respondReq: function() {
-  var response=2;
-  var orgname="org2";
-  console.log(sessionStorage.getItem("username"))
+respondReq: function(orgname,response) {
+  console.log(orgname);
 	IdentityContract.deployed().then(function(instance){
 		instance.respondToRequest(sessionStorage.getItem("username"),orgname,response).then(function(data){	
 			alert("Responded");
@@ -339,7 +337,7 @@ userorglist: function() {
         str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
       }
       if(data[1].c[0]===0){
-        pendingstr+="<tr><td>"+str+"</td><td><button class='btn btn-success' style='margin-right:10px' onclick='App.respondReq()'>Approve</button><button class='btn btn-danger' onclick='App.respondReq()'>Decline</button></td></tr>";
+        pendingstr+="<tr><td id="+i+">"+str+"</td><td><button class='btn btn-success' style='margin-right:10px' onclick='App.respondReq(document.getElementById("+i+").innerText,1)'>Approve</button><button class='btn btn-danger' onclick='App.respondReq(document.getElementById("+i+").innerText,2)'>Decline</button></td></tr>";
         sessionStorage.setItem("pendingstr",pendingstr);
       }
       else if(data[1].c[0]===1){
