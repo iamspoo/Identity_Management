@@ -294,7 +294,7 @@ orgViewId: function() {
         return;
       }
       else{
-        alert("Error in viewing ID");
+        alert("User has declined the request");
 		    return; 
       }
 	}).catch(function(err){ 
