@@ -179,6 +179,8 @@ uploadFile: function() {
       IdentityContract.deployed().then(function(instance){
         instance.storeimghash(imghash,sessionStorage.getItem("username")).then(function(result){
           alert("Image uploaded succesfully");
+		  location.reload();
+
         }).catch(function(err){ 
           console.log("ERROR! " + err.message)
           alert("Username doesnot exist-app")
@@ -224,6 +226,7 @@ requestId: function() {
 	IdentityContract.deployed().then(function(instance){
 		instance.requestUser(uname,sessionStorage.getItem("orgname")).then(function(result){	
 			alert("Reqested");
+			location.reload();
 	}).catch(function(err){ 
       console.log("ERROR! " + err.message)
 	  alert("unable to request");
@@ -239,6 +242,7 @@ respondReq: function(orgname,response) {
 	IdentityContract.deployed().then(function(instance){
 		instance.respondToRequest(sessionStorage.getItem("username"),orgname,response).then(function(data){	
 			alert("Responded");
+			location.reload();
 	}).catch(function(err){ 
       console.log("ERROR! " + err.message)
 	  alert("Unable to respond");
@@ -379,30 +383,41 @@ organisationuserlist: function() {
       console.log("ERROR! " + err.message)
     }) 
 
-
-  var userarr = [];
-  var requeststatus = [];
-  var n= sessionStorage.getItem("on");
+ var n= sessionStorage.getItem("on");
   console.log(n);
-    IdentityContract.deployed().then(function(instance){
-      for(var i=0; i<n; i++){
-      instance.getuserarrstatus(i,sessionStorage.getItem("orgname")).then(function(data){
-        var hex  = data[0].toString();
-        var str = '';
-        for (var k = 0; k < hex.length; k += 2) {
-          str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
-        }
-        userarr.push(str);
-        requeststatus.push(data[1].c[0]);
-        console.log(userarr[0],requeststatus[0]);
-        console.log(userarr[1],requeststatus[1]);
-        }).catch(function(err){ 
-        console.log("ERROR! " + err.message)
-      return;
-      })	}
-    }).catch(function(err){ 
+
+  IdentityContract.deployed().then(async function(instance){
+    sessionStorage.setItem("olderstr","");
+    var olderstr="<tbody>";
+    for(var i=0; i<n; i++){
+    await instance.getuserarrstatus(i,sessionStorage.getItem("orgname")).then(function(data){
+	var hex  = data[0].toString();
+      var str = '';
+      for (var k = 0; k < hex.length; k += 2) {
+        str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
+      }
+		if(data[1].c[0]===0){
+        olderstr+="<tr><td>"+str+"</td><td><button class='btn btn-warning'>Pending</button></td></tr>";
+        sessionStorage.setItem("olderstr",olderstr);
+      }
+      else if(data[1].c[0]===1){
+        olderstr+="<tr><td>"+str+"</td><td><button class='btn btn-success'>Approved</button></td></tr>";
+        sessionStorage.setItem("olderstr",olderstr);
+      }
+      else{
+        olderstr+="<tr><td>"+str+"</td><td><button class='btn btn-danger'>Declined</button></td></tr>";
+        sessionStorage.setItem("olderstr",olderstr);
+      } 
+      }).catch(function(err){ 
       console.log("ERROR! " + err.message)
-    })  
+    return;
+    })	}
+    var olderstr= sessionStorage.getItem("olderstr");    
+    olderstr+="</tbody>";
+    $("#table1").append(olderstr);
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  }) 
 },
 
 }
