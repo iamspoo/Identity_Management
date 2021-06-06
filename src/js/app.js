@@ -229,9 +229,8 @@ viewid: function() {
               const decipher = crypto.createDecipheriv('aes-256-ctr', key, iv);
               const data = decipher.update(result)
               const decrpyted = Buffer.concat([data, decipher.final()]);
-              sessionStorage.setItem("imgurl",s);
+              sessionStorage.setItem("imgarray",decrpyted.toString('base64'));
 		          window.location.assign("http://localhost:8080/idimg.html");
-              document.getElementById("output").src='data:image/jpeg;base64,' + decrpyted.toString('base64');
             }))
           }
         })
@@ -250,8 +249,8 @@ viewid: function() {
 },
 
 showimg: function(){
-	var url=sessionStorage.getItem("imgurl");
-	document.getElementById("output").src = url;
+	var imgarray=sessionStorage.getItem("imgarray");
+  document.getElementById("output").src='data:image/jpeg;base64,' + imgarray;
 },
 
 requestId: function() {
@@ -352,9 +351,10 @@ orgViewId: function() {
               const decipher = crypto.createDecipheriv('aes-256-ctr', key, iv);
               const data = decipher.update(result)
               const decrpyted = Buffer.concat([data, decipher.final()]);
-              sessionStorage.setItem("imgurl",s);
+              sessionStorage.setItem("imgarray",decrpyted.toString('base64'));
+              //console.log(decrpyted.toString('base64'))
+              //console.log(sessionStorage.getItem("imgarray"))          
 		          window.location.assign("http://localhost:8080/idimg.html");
-              document.getElementById("output").src='data:image/jpeg;base64,' + decrpyted.toString('base64');
             }))
           }
         })
@@ -491,48 +491,6 @@ organisationuserlist: function() {
     console.log("ERROR! " + err.message)
   }) 
 },
-
-encrypt: function(){
-	IdentityContract.deployed().then(function(instance){
-      instance.getkey(sessionStorage.getItem("username")).then(function(data){
-		  
-		  if(data!=""){
-				const encryptWithAES = (img) => {
-				const passphrase = data;
-				return CryptoJS.AES.encrypt(img, passphrase).toString();
-				};
-
-		  }
-		  
-		  }).catch(function(err){ 
-        console.log("ERROR! " + err.message)
-      return;
-      })	
-    }).catch(function(err){ 
-      console.log("ERROR! " + err.message)
-    }) 
-},
-decrypt: function(){
-IdentityContract.deployed().then(function(instance){
-      instance.getkey(sessionStorage.getItem("orgname"),sessionStorage.getItem("username")).then(function(data){
-		  if(data!=""){
-			const decryptWithAES = (ciphertext) => {
-			const passphrase = "123";
-			const bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
-			const originalText = bytes.toString(CryptoJS.enc.Utf8);
-			return originalText;
-			};
-		  }
-		  
-		  }).catch(function(err){ 
-        console.log("ERROR! " + err.message)
-      return;
-      })	
-    }).catch(function(err){ 
-      console.log("ERROR! " + err.message)
-    }) 
-},
-
 }
 window.addEventListener("load", function() {
   if (window.ethereum) {
