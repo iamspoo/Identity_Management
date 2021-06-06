@@ -205,7 +205,8 @@ viewid: function() {
         const hashStr = b58.encode(hashBytes)
         console.log(hashStr);
         var s="http://localhost:8081/ipfs/"+hashStr;
-        window.location.replace(s);
+        //window.location.replace(s);
+		document.getElementById("output").src = s;
         return;
       }
       else{
