@@ -5,8 +5,10 @@ import { default as contract } from "truffle-contract"
 import identityartifact from "../../build/contracts/Identity.json"
 var IdentityContract = contract(identityartifact)
 var bufferfile = null;
+const iv = 'e144267842890047' 
 var crypto = require('crypto');
 const b58 = require('b58');
+const { BufferListStream } = require('bl');
 
 window.App = {
   start: function() { 
@@ -46,17 +48,7 @@ loginuser: function() {
 },
 
 adduser :function(){
-	    var characters = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";  
-		var lenString = 7;  
-    var randomstring = '';  
-	 for (var i=0; i<lenString; i++) {  
-        var rnum = Math.floor(Math.random() * characters.length);  
-        randomstring += characters.substring(rnum, rnum+1);  
-    }  
-	/*const min=1;
-	const max=100000;
-	var key = Math.floor(Math.random() * (max - min + 1) ) + min;*/
-	console.log(randomstring);
+  var key=crypto.randomBytes(16).toString('hex');
 	var uname = $("#uname").val() 
 	var pword = $("#pword").val()
 	var cpword = $("#cpword").val()
@@ -71,7 +63,7 @@ adduser :function(){
 		return 
 	}
 	IdentityContract.deployed().then(function(instance){
-    instance.addUser(uname,pword).then(function(result){
+    instance.addUser(uname,pword,key).then(function(result){
 		alert("Thank you! for signing up")
 		window.location.replace("http://localhost:8080/");
     }).catch(function(err){ 
@@ -140,22 +132,41 @@ adduser2 :function(){
 },
 	
 captureFile: function(){
-	try{
-	const fileupload = document.getElementById("inputfile")
-	const seletedfile = fileupload.files[0];
-	const reader= new window.FileReader()
-	reader.readAsArrayBuffer(seletedfile)
-	reader.onloadend = () => {
-	    bufferfile= Buffer(reader.result)
-      //var cipher = crypto.createCipheriv('aes-128-cbc',"pwdkey","ivstr")
-      //var bufferfile = Buffer.concat([cipher.update(bufferfile),cipher.final()]);
-      //console.log("buffer", bufferfile)
-	}	
-	}
-	catch(err){
-		//err.message
-		alert("File unable to upload")
-	}	
+  IdentityContract.deployed().then(function(instance){
+		instance.getKey(sessionStorage.getItem("username")).then(function(data){	
+
+        var hex  = data.toString();
+        var key = '';
+        for (var n = 0; n < hex.length; n += 2) {
+          key += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+        }
+        key = key.substring(1);
+        console.log(key);
+        try{
+          const fileupload = document.getElementById("inputfile")
+          const seletedfile = fileupload.files[0];
+          const reader= new window.FileReader()
+          reader.readAsArrayBuffer(seletedfile)
+          reader.onloadend = () => {
+            var content= Buffer(reader.result)
+             
+            const cipher = crypto.createCipheriv('aes-256-ctr', key, iv);
+            const data = cipher.update(content);
+            bufferfile = Buffer.concat([data, cipher.final()]);
+            console.log("bufferfile", bufferfile)
+          }	
+          }
+          catch(err){
+            alert("File unable to upload")
+          }	
+	}).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+	  return;
+    })	
+  }).catch(function(err){ 
+    console.log("ERROR! " + err.message)
+  })  
+
 },
 
 uploadFile: function() {
@@ -169,13 +180,8 @@ uploadFile: function() {
     else{
       var imghash = String(result[0].hash);
       console.log(imghash)
-      var username="admin";
       imghash="0x"+b58.decode(imghash).slice(2).toString('hex');
       console.log(imghash)
-      /*var mykey = crypto.createCipher('aes-128-cbc',key);
-      var mystr = mykey.update(imghash, 'utf8', 'hex');
-      mystr += mykey.final('hex');*/
-
       IdentityContract.deployed().then(function(instance){
         instance.storeimghash(imghash,sessionStorage.getItem("username")).then(function(result){
           alert("Image uploaded succesfully");
@@ -193,27 +199,46 @@ uploadFile: function() {
 },
 
 viewid: function() {
+  var key;
 	IdentityContract.deployed().then(function(instance){
+    instance.getKey(sessionStorage.getItem("username")).then(function(data){	
+
+      var hex  = data.toString();
+      key = '';
+      for (var n = 0; n < hex.length; n += 2) {
+        key += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+      }
+      key = key.substring(1);
+      console.log(key);
+    })
+
 		instance.getHash(sessionStorage.getItem("username")).then(function(data){	
       if(data!=""){
-        /*var mykey1 = crypto.createDecipher('aes-128-cbc', 'mypassword');
-        var mystr1 = mykey1.update(mystr, 'hex', 'utf8')
-        mystr1 += mykey1.final('utf8');
-        console.log(mystr1);*/
         const hashHex = "1220" + data.slice(2)
         const hashBytes = Buffer.from(hashHex, 'hex');
         const hashStr = b58.encode(hashBytes)
         console.log(hashStr);
-        var s="http://localhost:8081/ipfs/"+hashStr;
-        //window.location.replace(s);
-		document.getElementById("output").src = s;
-        return;
+        const ipfs = window.IpfsApi('localhost', 5001)
+        ipfs.cat(hashStr, (err, result) => {
+          if (err) {
+            alert("Error in downloading image");
+            console.log(err);
+          }
+          else{
+            result.pipe(BufferListStream((err, result) => {
+              const decipher = crypto.createDecipheriv('aes-256-ctr', key, iv);
+              const data = decipher.update(result)
+              const decrpyted = Buffer.concat([data, decipher.final()]);
+              document.getElementById("output").src='data:image/jpeg;base64,' + decrpyted.toString('base64');
+            }))
+          }
+        })
       }
       else{
         alert("Error in viewing ID");
 		    return; 
       }
-	}).catch(function(err){ 
+	    }).catch(function(err){ 
       console.log("ERROR! " + err.message)
 	  return;
     })	
@@ -283,26 +308,47 @@ logger: function(){
 
 orgViewId: function() {
   var uname = $("#usernameView").val();
+  var key;
   IdentityContract.deployed().then(function(instance){
-		instance.orgViewId(uname,sessionStorage.getItem("orgname")).then(function(data){	
+    instance.getKey(uname).then(function(data){	
       var hex  = data.toString();
-      var str = '';
+      key = '';
       for (var n = 0; n < hex.length; n += 2) {
-        str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+        key += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+      }
+      key = key.substring(1);
+      console.log(key);
+    })
+
+		instance.orgViewId(uname,sessionStorage.getItem("orgname")).then(function(data){	
+      console.log(data)
+      var hex  = data[0].toString();
+      var str = '';
+      for (var k = 0; k < hex.length; k += 2) {
+        str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
       }
       var n=str.localeCompare("declined")
       if(n!=0){
-        /*var mykey1 = crypto.createDecipher('aes-128-cbc', 'mypassword');
-        var mystr1 = mykey1.update(mystr, 'hex', 'utf8')
-        mystr1 += mykey1.final('utf8');
-        console.log(mystr1);*/
         console.log(str)
         const hashHex = "1220" + data.slice(2)
         const hashBytes = Buffer.from(hashHex, 'hex');
         const hashStr = b58.encode(hashBytes)
         console.log(hashStr);
-        var s="http://localhost:8081/ipfs/"+hashStr;
-        window.location.replace(s);
+        const ipfs = window.IpfsApi('localhost', 5001)
+        ipfs.cat(hashStr, (err, result) => {
+          if (err) {
+            alert("Error in downloading image");
+            console.log(err);
+          }
+          else{
+            result.pipe(BufferListStream((err, result) => {
+              const decipher = crypto.createDecipheriv('aes-256-ctr', key, iv);
+              const data = decipher.update(result)
+              const decrpyted = Buffer.concat([data, decipher.final()]);
+              document.getElementById("output").src='data:image/jpeg;base64,' + decrpyted.toString('base64');
+            }))
+          }
+        })
         return;
       }
       else{
@@ -349,6 +395,8 @@ userorglist: function() {
       var strdate = '';
       for (var k = 0; k < hex.length; k += 2) {
         str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
+      }
+      for (var k = 0; k < hexdate.length; k += 2) {
         strdate += String.fromCharCode(parseInt(hexdate.substr(k, 2), 16));
       }
       if(data[1].c[0]===0){
@@ -408,6 +456,8 @@ organisationuserlist: function() {
       var strdate = '';
       for (var k = 0; k < hex.length; k += 2) {
         str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
+      }
+      for (var k = 0; k < hexdate.length; k += 2) {
         strdate += String.fromCharCode(parseInt(hexdate.substr(k, 2), 16));
       }
 		if(data[1].c[0]===0){

@@ -32,10 +32,10 @@ contract Identity {
     mapping (bytes32 => Organisation) org;
 	
 
-    function addUser(bytes32 username, bytes32 pswd) onlyOwner public {
+    function addUser(bytes32 username, bytes32 pswd,bytes32 key) onlyOwner public {
         if (users[username].doesExist == false){
 
-            users[username] = User(pswd,true,"","",new bytes32[](0),new int[](0),new bytes32[](0));
+            users[username] = User(pswd,true,"",key,new bytes32[](0),new int[](0),new bytes32[](0));
         }
         else{
             revert("Username already exists");
@@ -63,6 +63,9 @@ contract Identity {
             return true;
         }
         return false;
+    }
+    function getKey(bytes32 username) view public returns (bytes32) {
+        return users[username].key;
     }
 	
     function storeimghash(bytes32 hash, bytes32 username) onlyOwner public {
@@ -102,7 +105,6 @@ contract Identity {
         users[requestUsername].datearr[i] =datetime;
         org[orgUsername].status[j] = response;
         org[orgUsername].datearr[j] = datetime;
-       
     }
 
     function orgViewId(bytes32 requestUsername,bytes32 orgUsername) view public returns (bytes32){
@@ -112,9 +114,9 @@ contract Identity {
             i+=1;
         }
         if(org[orgUsername].status[i]==1){
-            return users[requestUsername].imghash;
+            return (users[requestUsername].imghash);
         }
-        return "declined";
+        return ("declined");
     }
 	
 	function getorgarrlength(bytes32 username)view public returns (uint){
