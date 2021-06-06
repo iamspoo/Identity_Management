@@ -224,8 +224,12 @@ viewid: function() {
 
 requestId: function() {
 	var uname = $("#usernameRequest").val();
+  var today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var time = today.getHours() + ":" + today.getMinutes();
+  var dateTime = date+' '+time;
 	IdentityContract.deployed().then(function(instance){
-		instance.requestUser(uname,sessionStorage.getItem("orgname")).then(function(result){	
+		instance.requestUser(uname,sessionStorage.getItem("orgname"),dateTime).then(function(result){	
 			alert("Reqested");
 			location.reload();
 	}).catch(function(err){ 
@@ -239,9 +243,12 @@ requestId: function() {
 },
 
 respondReq: function(orgname,response) {
-  console.log(orgname);
+  var today = new Date();
+  var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+  var time = today.getHours() + ":" + today.getMinutes();
+  var dateTime = date+' '+time;
 	IdentityContract.deployed().then(function(instance){
-		instance.respondToRequest(sessionStorage.getItem("username"),orgname,response).then(function(data){	
+		instance.respondToRequest(sessionStorage.getItem("username"),orgname,response,dateTime).then(function(data){	
 			alert("Responded");
 			location.reload();
 	}).catch(function(err){ 
@@ -337,20 +344,23 @@ userorglist: function() {
     for(var i=0; i<n; i++){
       await instance.getorgarrreponse(i,sessionStorage.getItem("username")).then(function(data){
       var hex  = data[0].toString();
+      var hexdate=data[2].toString();
       var str = '';
+      var strdate = '';
       for (var k = 0; k < hex.length; k += 2) {
         str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
+        strdate += String.fromCharCode(parseInt(hexdate.substr(k, 2), 16));
       }
       if(data[1].c[0]===0){
-        pendingstr+="<tr><td id="+i+">"+str+"</td><td><button class='btn btn-success' style='margin-right:10px' onclick='App.respondReq(document.getElementById("+i+").innerText,1)'>Approve</button><button class='btn btn-danger' onclick='App.respondReq(document.getElementById("+i+").innerText,2)'>Decline</button></td></tr>";
+        pendingstr+="<tr><td id="+i+">"+str+"</td><td>"+strdate+"</td><td><button class='btn btn-success' style='margin-right:10px' onclick='App.respondReq(document.getElementById("+i+").innerText,1)'>Approve</button><button class='btn btn-danger' onclick='App.respondReq(document.getElementById("+i+").innerText,2)'>Decline</button></td></tr>";
         sessionStorage.setItem("pendingstr",pendingstr);
       }
       else if(data[1].c[0]===1){
-        olderstr+="<tr><td>"+str+"</td><td><button class='btn btn-success'>Approved</button></td></tr>";
+        olderstr+="<tr><td>"+str+"</td><td>"+strdate+"</td><td><button class='btn btn-success'>Approved</button></td></tr>";
         sessionStorage.setItem("olderstr",olderstr);
       }
       else{
-        olderstr+="<tr><td>"+str+"</td><td><button class='btn btn-danger'>Declined</button></td></tr>";
+        olderstr+="<tr><td>"+str+"</td><td>"+strdate+"</td><td><button class='btn btn-danger'>Declined</button></td></tr>";
         sessionStorage.setItem("olderstr",olderstr);
       } 
       }).catch(function(err){ 
@@ -392,21 +402,24 @@ organisationuserlist: function() {
     var olderstr="<tbody>";
     for(var i=0; i<n; i++){
     await instance.getuserarrstatus(i,sessionStorage.getItem("orgname")).then(function(data){
-	var hex  = data[0].toString();
+      var hex  = data[0].toString();
+      var hexdate=data[2].toString();
       var str = '';
+      var strdate = '';
       for (var k = 0; k < hex.length; k += 2) {
         str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
+        strdate += String.fromCharCode(parseInt(hexdate.substr(k, 2), 16));
       }
 		if(data[1].c[0]===0){
-        olderstr+="<tr><td>"+str+"</td><td><button class='btn btn-warning'>Pending</button></td></tr>";
+        olderstr+="<tr><td>"+str+"</td><td>"+strdate+"</td><td><button class='btn btn-warning'>Pending</button></td></tr>";
         sessionStorage.setItem("olderstr",olderstr);
       }
       else if(data[1].c[0]===1){
-        olderstr+="<tr><td>"+str+"</td><td><button class='btn btn-success'>Approved</button></td></tr>";
+        olderstr+="<tr><td>"+str+"</td><td>"+strdate+"</td><td><button class='btn btn-success'>Approved</button></td></tr>";
         sessionStorage.setItem("olderstr",olderstr);
       }
       else{
-        olderstr+="<tr><td>"+str+"</td><td><button class='btn btn-danger'>Declined</button></td></tr>";
+        olderstr+="<tr><td>"+str+"</td><td>"+strdate+"</td><td><button class='btn btn-danger'>Declined</button></td></tr>";
         sessionStorage.setItem("olderstr",olderstr);
       } 
       }).catch(function(err){ 

@@ -17,6 +17,7 @@ contract Identity {
 		bytes32 key;
 		bytes32[] orgarr;
         int[] response;
+        bytes32[] datearr;
     }
     
     struct Organisation {
@@ -24,6 +25,7 @@ contract Identity {
         bool doesExist; 
 		bytes32[] userarr;
         int[] status;
+        bytes32[] datearr;
     }
     
     mapping (bytes32 => User) users;
@@ -33,7 +35,7 @@ contract Identity {
     function addUser(bytes32 username, bytes32 pswd) onlyOwner public {
         if (users[username].doesExist == false){
 
-            users[username] = User(pswd,true,"","",new bytes32[](0),new int[](0));
+            users[username] = User(pswd,true,"","",new bytes32[](0),new int[](0),new bytes32[](0));
         }
         else{
             revert("Username already exists");
@@ -41,7 +43,7 @@ contract Identity {
     }
     function addOrg(bytes32 username, bytes32 pswd) onlyOwner public {
         if (org[username].doesExist == false){
-            org[username] = Organisation(pswd,true,new bytes32[](0),new int[](0));
+            org[username] = Organisation(pswd,true,new bytes32[](0),new int[](0),new bytes32[](0));
         }
         else{
             revert("Username already exists");
@@ -76,15 +78,16 @@ contract Identity {
         return users[username].imghash;
     }
 
-	function requestUser(bytes32 requestUsername, bytes32 orgUsername)onlyOwner public{
+	function requestUser(bytes32 requestUsername, bytes32 orgUsername, bytes32 datetime)onlyOwner public{
         users[requestUsername].orgarr.push(orgUsername);
         users[requestUsername].response.push(0);
+        users[requestUsername].datearr.push(datetime);
         org[orgUsername].userarr.push(requestUsername);
         org[orgUsername].status.push(0);
-        
+        org[orgUsername].datearr.push(datetime);
 	}
 
-    function respondToRequest(bytes32 requestUsername, bytes32 orgUsername, int response)onlyOwner public{
+    function respondToRequest(bytes32 requestUsername, bytes32 orgUsername, int response, bytes32 datetime)onlyOwner public{
         uint i=0;
         uint j=0;
         uint n=users[requestUsername].orgarr.length;
@@ -96,8 +99,10 @@ contract Identity {
             j+=1;
         }
         users[requestUsername].response[i] =response;
+        users[requestUsername].datearr[i] =datetime;
         org[orgUsername].status[j] = response;
-        
+        org[orgUsername].datearr[j] = datetime;
+       
     }
 
     function orgViewId(bytes32 requestUsername,bytes32 orgUsername) view public returns (bytes32){
@@ -116,15 +121,15 @@ contract Identity {
 		return users[username].response.length;
 	}
 	
-	 function getorgarrreponse(uint i,bytes32 username) view public returns (bytes32,int) {
-        return (users[username].orgarr[i],users[username].response[i]);
+	 function getorgarrreponse(uint i,bytes32 username) view public returns (bytes32,int,bytes32) {
+        return (users[username].orgarr[i],users[username].response[i],users[username].datearr[i]);
     }
 	
 	function getuserarrlength(bytes32 orgname)view public returns (uint){
 		return org[orgname].status.length;
 	}
 	
-	 function getuserarrstatus(uint i,bytes32 orgname) view public returns (bytes32,int) {
-        return (org[orgname].userarr[i],org[orgname].status[i]);
+	 function getuserarrstatus(uint i,bytes32 orgname) view public returns (bytes32,int,bytes32) {
+        return (org[orgname].userarr[i],org[orgname].status[i],org[orgname].datearr[i]);
     }
 }
