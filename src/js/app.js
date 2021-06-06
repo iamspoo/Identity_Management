@@ -27,7 +27,7 @@ loginuser: function() {
 		instance.validateUser(uname,pword).then(function(data){	
       console.log(data);
       if(data==true){
-        window.location.replace("http://localhost:8080/main.html");
+        window.location.assign("http://localhost:8080/main.html");
 			sessionStorage.setItem("username",uname); 
 			//console.log(sessionStorage.getItem("username"));
 			return;
@@ -73,7 +73,7 @@ adduser :function(){
 	IdentityContract.deployed().then(function(instance){
     instance.addUser(uname,pword).then(function(result){
 		alert("Thank you! for signing up")
-		window.location.replace("http://localhost:8080/");
+		window.location.assign("http://localhost:8080/");
     }).catch(function(err){ 
       console.log("ERROR! " + err.message)
       alert("Username already exists")
@@ -95,7 +95,7 @@ loginuser2: function() {
 		instance.validateOrg(uname,pword).then(function(data){	
       console.log(data);
       if(data==true){
-        window.location.replace("http://localhost:8080/orgmain.html");
+        window.location.assign("http://localhost:8080/orgmain.html");
 			sessionStorage.setItem("orgname",uname); 
         return;
       }
@@ -128,7 +128,7 @@ adduser2 :function(){
 	IdentityContract.deployed().then(function(instance){
     instance.addOrg(uname,pword).then(function(result){
 		alert("Thank you! for signing up")
-		window.location.replace("http://localhost:8080/");
+		window.location.assign("http://localhost:8080/");
     }).catch(function(err){ 
       console.log("ERROR! " + err.message)
       alert("Username already exists")
@@ -147,9 +147,6 @@ captureFile: function(){
 	reader.readAsArrayBuffer(seletedfile)
 	reader.onloadend = () => {
 	    bufferfile= Buffer(reader.result)
-      //var cipher = crypto.createCipheriv('aes-128-cbc',"pwdkey","ivstr")
-      //var bufferfile = Buffer.concat([cipher.update(bufferfile),cipher.final()]);
-      //console.log("buffer", bufferfile)
 	}	
 	}
 	catch(err){
@@ -172,10 +169,6 @@ uploadFile: function() {
       var username="admin";
       imghash="0x"+b58.decode(imghash).slice(2).toString('hex');
       console.log(imghash)
-      /*var mykey = crypto.createCipher('aes-128-cbc',key);
-      var mystr = mykey.update(imghash, 'utf8', 'hex');
-      mystr += mykey.final('hex');*/
-
       IdentityContract.deployed().then(function(instance){
         instance.storeimghash(imghash,sessionStorage.getItem("username")).then(function(result){
           alert("Image uploaded succesfully");
@@ -196,17 +189,14 @@ viewid: function() {
 	IdentityContract.deployed().then(function(instance){
 		instance.getHash(sessionStorage.getItem("username")).then(function(data){	
       if(data!=""){
-        /*var mykey1 = crypto.createDecipher('aes-128-cbc', 'mypassword');
-        var mystr1 = mykey1.update(mystr, 'hex', 'utf8')
-        mystr1 += mykey1.final('utf8');
-        console.log(mystr1);*/
         const hashHex = "1220" + data.slice(2)
         const hashBytes = Buffer.from(hashHex, 'hex');
         const hashStr = b58.encode(hashBytes)
         console.log(hashStr);
         var s="http://localhost:8081/ipfs/"+hashStr;
-        //window.location.replace(s);
-		document.getElementById("output").src = s;
+		console.log(s);
+		sessionStorage.setItem("imgurl",s);
+		window.location.assign("http://localhost:8080/idimg.html");
         return;
       }
       else{
@@ -220,6 +210,11 @@ viewid: function() {
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   })  
+},
+
+showimg: function(){
+	var url=sessionStorage.getItem("imgurl");
+	document.getElementById("output").src = url;
 },
 
 requestId: function() {
@@ -292,17 +287,14 @@ orgViewId: function() {
       }
       var n=str.localeCompare("declined")
       if(n!=0){
-        /*var mykey1 = crypto.createDecipher('aes-128-cbc', 'mypassword');
-        var mystr1 = mykey1.update(mystr, 'hex', 'utf8')
-        mystr1 += mykey1.final('utf8');
-        console.log(mystr1);*/
         console.log(str)
         const hashHex = "1220" + data.slice(2)
         const hashBytes = Buffer.from(hashHex, 'hex');
         const hashStr = b58.encode(hashBytes)
         console.log(hashStr);
         var s="http://localhost:8081/ipfs/"+hashStr;
-        window.location.replace(s);
+		sessionStorage.setItem("imgurl",s);
+		window.location.assign("http://localhost:8080/idimg.html");
         return;
       }
       else{
@@ -432,6 +424,47 @@ organisationuserlist: function() {
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   }) 
+},
+
+encrypt: function(){
+	IdentityContract.deployed().then(function(instance){
+      instance.getkey(sessionStorage.getItem("username")).then(function(data){
+		  
+		  if(data!=""){
+				const encryptWithAES = (img) => {
+				const passphrase = data;
+				return CryptoJS.AES.encrypt(img, passphrase).toString();
+				};
+
+		  }
+		  
+		  }).catch(function(err){ 
+        console.log("ERROR! " + err.message)
+      return;
+      })	
+    }).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+    }) 
+},
+decrypt: function(){
+IdentityContract.deployed().then(function(instance){
+      instance.getkey(sessionStorage.getItem("orgname"),sessionStorage.getItem("username")).then(function(data){
+		  if(data!=""){
+			const decryptWithAES = (ciphertext) => {
+			const passphrase = "123";
+			const bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
+			const originalText = bytes.toString(CryptoJS.enc.Utf8);
+			return originalText;
+			};
+		  }
+		  
+		  }).catch(function(err){ 
+        console.log("ERROR! " + err.message)
+      return;
+      })	
+    }).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+    }) 
 },
 
 }
