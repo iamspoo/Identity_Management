@@ -29,7 +29,7 @@ loginuser: function() {
 		instance.validateUser(uname,pword).then(function(data){	
       console.log(data);
       if(data==true){
-        window.location.replace("http://localhost:8080/main.html");
+        window.location.assign("http://localhost:8080/main.html");
 			sessionStorage.setItem("username",uname); 
 			//console.log(sessionStorage.getItem("username"));
 			return;
@@ -65,7 +65,7 @@ adduser :function(){
 	IdentityContract.deployed().then(function(instance){
     instance.addUser(uname,pword,key).then(function(result){
 		alert("Thank you! for signing up")
-		window.location.replace("http://localhost:8080/");
+		window.location.assign("http://localhost:8080/");
     }).catch(function(err){ 
       console.log("ERROR! " + err.message)
       alert("Username already exists")
@@ -87,7 +87,7 @@ loginuser2: function() {
 		instance.validateOrg(uname,pword).then(function(data){	
       console.log(data);
       if(data==true){
-        window.location.replace("http://localhost:8080/orgmain.html");
+        window.location.assign("http://localhost:8080/orgmain.html");
 			sessionStorage.setItem("orgname",uname); 
         return;
       }
@@ -120,7 +120,7 @@ adduser2 :function(){
 	IdentityContract.deployed().then(function(instance){
     instance.addOrg(uname,pword).then(function(result){
 		alert("Thank you! for signing up")
-		window.location.replace("http://localhost:8080/");
+		window.location.assign("http://localhost:8080/");
     }).catch(function(err){ 
       console.log("ERROR! " + err.message)
       alert("Username already exists")
@@ -229,6 +229,8 @@ viewid: function() {
               const decipher = crypto.createDecipheriv('aes-256-ctr', key, iv);
               const data = decipher.update(result)
               const decrpyted = Buffer.concat([data, decipher.final()]);
+              sessionStorage.setItem("imgurl",s);
+		          window.location.assign("http://localhost:8080/idimg.html");
               document.getElementById("output").src='data:image/jpeg;base64,' + decrpyted.toString('base64');
             }))
           }
@@ -245,6 +247,11 @@ viewid: function() {
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   })  
+},
+
+showimg: function(){
+	var url=sessionStorage.getItem("imgurl");
+	document.getElementById("output").src = url;
 },
 
 requestId: function() {
@@ -345,11 +352,12 @@ orgViewId: function() {
               const decipher = crypto.createDecipheriv('aes-256-ctr', key, iv);
               const data = decipher.update(result)
               const decrpyted = Buffer.concat([data, decipher.final()]);
+              sessionStorage.setItem("imgurl",s);
+		          window.location.assign("http://localhost:8080/idimg.html");
               document.getElementById("output").src='data:image/jpeg;base64,' + decrpyted.toString('base64');
             }))
           }
         })
-        return;
       }
       else{
         alert("User has declined the request");
@@ -482,6 +490,47 @@ organisationuserlist: function() {
   }).catch(function(err){ 
     console.log("ERROR! " + err.message)
   }) 
+},
+
+encrypt: function(){
+	IdentityContract.deployed().then(function(instance){
+      instance.getkey(sessionStorage.getItem("username")).then(function(data){
+		  
+		  if(data!=""){
+				const encryptWithAES = (img) => {
+				const passphrase = data;
+				return CryptoJS.AES.encrypt(img, passphrase).toString();
+				};
+
+		  }
+		  
+		  }).catch(function(err){ 
+        console.log("ERROR! " + err.message)
+      return;
+      })	
+    }).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+    }) 
+},
+decrypt: function(){
+IdentityContract.deployed().then(function(instance){
+      instance.getkey(sessionStorage.getItem("orgname"),sessionStorage.getItem("username")).then(function(data){
+		  if(data!=""){
+			const decryptWithAES = (ciphertext) => {
+			const passphrase = "123";
+			const bytes = CryptoJS.AES.decrypt(ciphertext, passphrase);
+			const originalText = bytes.toString(CryptoJS.enc.Utf8);
+			return originalText;
+			};
+		  }
+		  
+		  }).catch(function(err){ 
+        console.log("ERROR! " + err.message)
+      return;
+      })	
+    }).catch(function(err){ 
+      console.log("ERROR! " + err.message)
+    }) 
 },
 
 }
