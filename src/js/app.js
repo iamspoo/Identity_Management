@@ -328,7 +328,7 @@ orgViewId: function() {
 
 		instance.orgViewId(uname,sessionStorage.getItem("orgname")).then(function(data){	
       console.log(data)
-      var hex  = data[0].toString();
+      var hex  = data.toString();
       var str = '';
       for (var k = 0; k < hex.length; k += 2) {
         str += String.fromCharCode(parseInt(hex.substr(k, 2), 16));
